@@ -1,24 +1,17 @@
 from django.urls import path
-from .views import BarberView, BarberDetail, CommentView
+from . import views
+## when we use ModelViewSet we should implement urls with routers
 from rest_framework_nested import routers
 
 
-urlpatterns = [
-    path("info2/<int:pk>/",BarberDetail.as_view(), name="Barber info with comments"),
-    path("comments/", CommentView.as_view(), name="all_comments"),
-]
-
-## when we use ModelViewSet we should implement urls with routers
-
-
 router = routers.DefaultRouter()
-router.register('info',BarberView,basename='info')
+router.register('info',views.BarberView,basename='info')
 
 
 barber_router = routers.NestedDefaultRouter(router,'info',lookup='barbershop')
 # barber_router.register('images',views.BarberShopImagesView,basename='images')
 
-urlpatterns += router.urls + barber_router.urls
+urlpatterns = router.urls + barber_router.urls
 
 # router = DefaultRouter()
 # router.register('info',views.BarberView)
