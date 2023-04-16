@@ -11,9 +11,9 @@ class User(AbstractUser):
 
     role = models.CharField(choices=choice_field,max_length=8)
     email = models.EmailField(unique=True)
-    username = models.CharField(null=True,max_length=20)
+    username = models.CharField(default='user',null=True,max_length=20)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['id','first_name','last_name','role','password']
+    REQUIRED_FIELDS = ['id','username','role','password']
 
         
     groups = models.ManyToManyField(

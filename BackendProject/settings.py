@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_filters',
     "Auth",
     'Barber',
+    'Customer',
     'djoser'
 ]
 
@@ -101,12 +102,12 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 
-# AUTH_USER_MODEL = 'Auth.User'
+AUTH_USER_MODEL = 'Auth.User'
 
 
 
