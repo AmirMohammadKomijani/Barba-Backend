@@ -15,6 +15,7 @@ django-computedfields = "*"
 django-mysql = "*"
 drf-nested-routers = "*"
 djoser = "*"
+drf-writable-nested = "*"
 
 [dev-packages]
 
