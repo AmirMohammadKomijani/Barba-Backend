@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: tahlil_project
+-- Host: localhost    Database: testtahlil
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -16,36 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_customer`
+-- Table structure for table `django_content_type`
 --
 
-DROP TABLE IF EXISTS `auth_customer`;
+DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_customer` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `last_login` datetime(6) DEFAULT NULL,
-  `is_superuser` tinyint(1) NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `phone_Number` varchar(11) NOT NULL,
-  `email` varchar(254) NOT NULL,
-  `gender` varchar(6) NOT NULL,
-  `password` varchar(255) NOT NULL,
+CREATE TABLE `django_content_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `phone_Number` (`phone_Number`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `password` (`password`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_customer`
+-- Dumping data for table `django_content_type`
 --
 
-LOCK TABLES `auth_customer` WRITE;
-/*!40000 ALTER TABLE `auth_customer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_customer` ENABLE KEYS */;
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(7,'Barber','barber'),(8,'Barber','rate'),(5,'contenttypes','contenttype'),(9,'Customer','customer'),(6,'sessions','session');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-10 23:39:49
+-- Dump completed on 2023-04-17 16:34:16

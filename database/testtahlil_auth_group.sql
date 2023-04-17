@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: tahlil_project
+-- Host: localhost    Database: testtahlil
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -16,31 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_customer_groups`
+-- Table structure for table `auth_group`
 --
 
-DROP TABLE IF EXISTS `auth_customer_groups`;
+DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_customer_groups` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `customer_id` bigint NOT NULL,
-  `group_id` int NOT NULL,
+CREATE TABLE `auth_group` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `Auth_customer_groups_customer_id_group_id_8a3d89b9_uniq` (`customer_id`,`group_id`),
-  KEY `Auth_customer_groups_group_id_017c93f1_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `Auth_customer_groups_customer_id_bfe5856c_fk_Auth_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `auth_customer` (`id`),
-  CONSTRAINT `Auth_customer_groups_group_id_017c93f1_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_customer_groups`
+-- Dumping data for table `auth_group`
 --
 
-LOCK TABLES `auth_customer_groups` WRITE;
-/*!40000 ALTER TABLE `auth_customer_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_customer_groups` ENABLE KEYS */;
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-10 23:39:48
+-- Dump completed on 2023-04-17 16:34:15

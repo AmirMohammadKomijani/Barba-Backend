@@ -13,7 +13,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(default='user',null=True,max_length=20,unique=False)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['username','password']
+    REQUIRED_FIELDS = ['role','username','password']
 
         
     groups = models.ManyToManyField(

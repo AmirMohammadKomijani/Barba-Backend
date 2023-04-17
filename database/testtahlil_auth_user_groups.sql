@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: tahlil_project
+-- Host: localhost    Database: testtahlil
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -16,31 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_barber_user_permissions`
+-- Table structure for table `auth_user_groups`
 --
 
-DROP TABLE IF EXISTS `auth_barber_user_permissions`;
+DROP TABLE IF EXISTS `auth_user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_barber_user_permissions` (
+CREATE TABLE `auth_user_groups` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `barber_id` bigint NOT NULL,
-  `permission_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `Auth_barber_user_permiss_barber_id_permission_id_ba69de54_uniq` (`barber_id`,`permission_id`),
-  KEY `Auth_barber_user_per_permission_id_097c5f12_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `Auth_barber_user_per_barber_id_f2bed481_fk_Auth_barb` FOREIGN KEY (`barber_id`) REFERENCES `auth_barber` (`id`),
-  CONSTRAINT `Auth_barber_user_per_permission_id_097c5f12_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
+  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
+  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
+  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_barber_user_permissions`
+-- Dumping data for table `auth_user_groups`
 --
 
-LOCK TABLES `auth_barber_user_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_barber_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_barber_user_permissions` ENABLE KEYS */;
+LOCK TABLES `auth_user_groups` WRITE;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-10 23:39:48
+-- Dump completed on 2023-04-17 16:34:16

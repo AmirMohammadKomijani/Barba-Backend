@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-*qyobn_46!3pc_-lb9ru!$l_o!w)gbs*e9^id8=_ei^n@u$w4j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['amirmohammadkomijani.pythonanywhere.com']
 
 
 # Application definition
@@ -46,8 +46,12 @@ INSTALLED_APPS = [
     "Auth",
     'Barber',
     'Customer',
-    'djoser'
+    'djoser',
+    "corsheaders",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -84,13 +88,20 @@ WSGI_APPLICATION = "BackendProject.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'testTahlil',
+#         'HOST': 'localhost',
+#         'USER': 'root',
+#         'PASSWORD': 'amirmysql2023'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testTahlil',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': 'amirmysql2023'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -98,6 +109,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':9,
 }
 
 SIMPLE_JWT = {
