@@ -48,24 +48,24 @@ class BarberProfileView(ModelViewSet):
         
 
 
-class BarberBaseProfileView(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    # permission_classes = [IsAuthenticated]
+# class BarberBaseProfileView(ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     # permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
-    def me(self, request):
-        (user, created) = User.objects.get_or_create(
-            id=request.user.id)
-        # baseInfo = User.objects.prefetch_related('user_set').all()
-        if request.method == 'GET':
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        elif request.method == 'PUT':
-            serializer = UserSerializer(user, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+#     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+#     def me(self, request):
+#         (user, created) = User.objects.get_or_create(
+#             id=request.user.id)
+#         # baseInfo = User.objects.prefetch_related('user_set').all()
+#         if request.method == 'GET':
+#             serializer = UserSerializer(user)
+#             return Response(serializer.data)
+#         elif request.method == 'PUT':
+#             serializer = UserSerializer(user, data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)
 
 
 

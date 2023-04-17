@@ -18,3 +18,12 @@ this is for barber-selection task. in these codes i try to update database in se
   #     self.save()
 
 -------------------------------------------------------------------------------------------------------------------
+
+
+    # users = serializers.SerializerMethodField('get_users')
+    
+    # def get_users(self,obj):
+    #     return UserSerializer(obj.user).data
+    #users = UserSerializer(read_only=False)
+    # baseInfo = serializers.SlugRelatedField(queryset = User.objects.prefetch_related('barber_set').all(),slug_field='barber_set')
+    class Meta:
