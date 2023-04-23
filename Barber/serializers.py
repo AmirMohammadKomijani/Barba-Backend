@@ -1,24 +1,75 @@
 from rest_framework import serializers
-from .models import Barber,Rate
+from .models import Barber,Rate,Service
 from Auth.serializer import UserSerializer
 
 
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Service
+        fields = ['service','price','service_pic','category']
 
-# class BarberShopImagesSerializer(serializers.ModelSerializer):
+class CreateServiceSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Service
+        fields = ['service','price','service_pic','category']
+
     
-#     def create(self, validated_data):
-#         barbershop_id = self.context['barbershop_id']
-#         return BarberShopImages.objects.create(barbershop_id=barbershop_id,**validated_data)
+    def save(self, **kwargs):
+        barber, created = Barber.objects.get_or_create(user_id=self.context['user_id'])
+        self.validated_data.update({'barber': barber, **kwargs})
+        service = Service.objects.create(**self.validated_data)
+        return service
     
-#     class Meta:
-#         model = BarberShopImages
-#         fields = ['background','logo']
+    # def create(self,validated_data):
+    #     services = Service.objects.create(**validated_data)
+    #     return services
+    
+    # def update(self, instance, validated_data):
+    #     instance.service = validated_data.get('service',instance.service)
+    #     instance.price = validated_data.get('price',instance.price)
+    #     instance.service_pic = validated_data.get('service_pic',instance.service_pic)
+    #     instance.category = validated_data.get('category',instance.category)
+
+    #     instance.save()
+    #     return instance
+        
+        
+# class CategorySerializer(serializers.ModelSerializer):
+#     services = ServiceSerializer()
+#     class Meta():
+#         model = Category
+#         fields = ['category','barber','services']
+    
+    # def create(self, validated_data):
+    #     services_data = validated_data.pop('services', [])
+    #     category = Category.objects.create(**validated_data)
+    #     for service_data in services_data:
+    #         Service.objects.create(catg=category, **service_data)
+    #     return category
+    
+    # def update(self, instance, validated_data):
+    #     instance.category = validated_data.get('category',instance.category)
+    #     instance.barber = validated_data.get('barber',instance.barber)
+
+    #     service_data = validated_data.pop('services', None)
+    #     if service_data:
+    #         service = instance.service
+    #         service_serializer = ServiceSerializer(service, data=service_data)
+    #         service_serializer.is_valid(raise_exception=True)
+    #         service_serializer.save()
+
+    #     instance.save()
+    #     return instance
+
+
+
 
 
 class BarberSerializer(serializers.ModelSerializer):
+    services = ServiceSerializer(many=True)
     class Meta:
         model = Barber
-        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo']
+        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','services']
 
 
 class BarberProfileSerializer(serializers.ModelSerializer):
@@ -48,34 +99,15 @@ class BarberProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
-    # def update(self,instance , validated_data):
-        
-    #     categories_data = validated_data.pop('categories')
-    #     categories = instance.categories
-    #     cate = []
-    #     for data in categories_data:
-    #         cate.append(models.Category.objects.get(name=data["name"]))
-    #     categories.set(cate)
-
-    #     instance.title = validated_data.get('title' , instance.title)
-    #     instance.room_type = validated_data.get("room_type" , instance.room_type)
-    #     instance.link = validated_data.get('link' , instance.link)
-    #     instance.password = validated_data.get('password' , instance.password)
-    #     instance.description = validated_data.get('description' , instance.description)
-    #     instance.start_date = validated_data.get('start_date' , instance.start_date)
-    #     instance.end_date = validated_data.get('end_date' , instance.end_date)
-    #     instance.maximum_member_count = validated_data.get('maximum_member_count' , instance.maximum_member_count)
-    #     instance.open_status = validated_data.get("open_status" , instance.open_status)
-        
-    #     instance.save()
-        
-    #     return instance
-
-
 class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
         fields = ['barbershop','stars']
+
+
+
+
+    
 
 
 

@@ -28,7 +28,8 @@ SECRET_KEY = "django-insecure-*qyobn_46!3pc_-lb9ru!$l_o!w)gbs*e9^id8=_ei^n@u$w4j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['amirmohammadkomijani.pythonanywhere.com']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['amirmohammadkomijani.pythonanywhere.com']
 
 
 # Application definition
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "BackendProject.urls"
@@ -88,22 +90,22 @@ WSGI_APPLICATION = "BackendProject.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'testTahlil',
-#         'HOST': 'localhost',
-#         'USER': 'root',
-#         'PASSWORD': 'amirmysql2023'
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'testTahlil',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': 'amirmysql2023'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -120,7 +122,7 @@ SIMPLE_JWT = {
 }
 
 
-AUTH_USER_MODEL = 'Auth.User'
+# AUTH_USER_MODEL = 'Auth.User'
 
 
 

@@ -11,13 +11,19 @@ router = routers.SimpleRouter()
 
 nestedRouter.register('info',views.BarberView,basename='info')
 router.register('profile',views.BarberProfileView,basename='profile')
+# router.register('category',views.addCategory)
+router.register('service',views.addService,basename='add service')
+
+
+
 # router.register('baseprofile',views.BarberBaseProfileView,basename='Base-profile')
 # urlpatterns = [
-#             path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
+#             # path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
 #             #path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
 # ]
 # urlpatterns = [
-#         path('baseprofile/',views.BarberBaseProfileView.as_view()),
+#         # path('baseprofile/',views.BarberBaseProfileView.as_view()),
+#         path('add/',views.addService.as_view())
 # ]
 
 barber_info = nested.NestedDefaultRouter(nestedRouter,'info',lookup='barbershop')

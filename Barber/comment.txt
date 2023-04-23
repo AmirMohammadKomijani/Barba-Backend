@@ -27,3 +27,140 @@ this is for barber-selection task. in these codes i try to update database in se
     #users = UserSerializer(read_only=False)
     # baseInfo = serializers.SlugRelatedField(queryset = User.objects.prefetch_related('barber_set').all(),slug_field='barber_set')
     class Meta:
+
+
+
+-----------------------------------------------------------------------
+
+sprint 2
+
+
+    # def update(self,instance , validated_data):
+        
+    #     categories_data = validated_data.pop('categories')
+    #     categories = instance.categories
+    #     cate = []
+    #     for data in categories_data:
+    #         cate.append(models.Category.objects.get(name=data["name"]))
+    #     categories.set(cate)
+
+    #     instance.title = validated_data.get('title' , instance.title)
+    #     instance.room_type = validated_data.get("room_type" , instance.room_type)
+    #     instance.link = validated_data.get('link' , instance.link)
+    #     instance.password = validated_data.get('password' , instance.password)
+    #     instance.description = validated_data.get('description' , instance.description)
+    #     instance.start_date = validated_data.get('start_date' , instance.start_date)
+    #     instance.end_date = validated_data.get('end_date' , instance.end_date)
+    #     instance.maximum_member_count = validated_data.get('maximum_member_count' , instance.maximum_member_count)
+    #     instance.open_status = validated_data.get("open_status" , instance.open_status)
+        
+    #     instance.save()
+        
+    #     return instance
+
+
+
+
+# class BarberShopImagesSerializer(serializers.ModelSerializer):
+    
+#     def create(self, validated_data):
+#         barbershop_id = self.context['barbershop_id']
+#         return BarberShopImages.objects.create(barbershop_id=barbershop_id,**validated_data)
+    
+#     class Meta:
+#         model = BarberShopImages
+#         fields = ['background','logo']
+
+
+
+
+# class BarberBaseProfileView(ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     # permission_classes = [IsAuthenticated]
+
+#     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+#     def me(self, request):
+#         (user, created) = User.objects.get_or_create(
+#             id=request.user.id)
+#         # baseInfo = User.objects.prefetch_related('user_set').all()
+#         if request.method == 'GET':
+#             serializer = UserSerializer(user)
+#             return Response(serializer.data)
+#         elif request.method == 'PUT':
+#             serializer = UserSerializer(user, data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)
+
+
+
+# class BarberBaseProfileView(APIView):
+#     def get(self,request):
+#         queryset = User.objects.get(pk=request.user.id)
+#         serializer = UserSerializer(queryset)
+#         return Response(serializer.data)
+
+#     def put(self,request):
+#         user = User.objects.get(pk=request.user.id)
+#         serializer = UserSerializer(user,data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+
+# class BarberBaseProfileView(RetrieveUpdateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     # lookup_fields = ['email', 'username']
+        
+
+# class BarberBaseProfileView(ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [IsAuthenticated]
+
+    # def get_queryset(self):
+    #     return User.objects.prefetch_related('barber').all()
+
+
+
+
+# class BarberBaseProfileView(ModelViewSet):
+#     queryset = User.objects.prefetch_related('barber').all()
+#     serializer_class = UserSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+#     def me(self, request):
+#         (barber, created) = User.objects.get(
+#             barber=request.user.id)
+#         # baseInfo = User.objects.prefetch_related('barber_set').all()
+#         if request.method == 'GET':
+#             serializer = UserSerializer(barber)
+#             return Response(serializer.data)
+#         elif request.method == 'PUT':
+#             serializer = UserSerializer(barber, data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)
+
+
+
+
+# class BarberShopImagesView(ModelViewSet):
+#     serializer_class = BarberShopImagesSerializer
+
+#     def get_serializer_context(self):
+#         return {'barbershop_id':self.kwargs['barbershop_pk']}
+
+#     def get_queryset(self):
+#         return BarberShopImages.objects.filter(barbershop_id=self.kwargs['barbershop_pk'])
+
+
+
+# class BarberView(ModelViewSet):
+#     queryset = Barber.objects.all()
+#     serializer_class = BarberSerializer
+
+
+----------------------------------------------------------
