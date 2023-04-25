@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from .models import Barber,Rate,Service
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -46,6 +46,14 @@ class BarberProfileView(ModelViewSet):
             return Response(serializer.data)
 
 
+class Areas(ModelViewSet):
+    serializer_class = BarberAreasSerializer
+
+    def get_queryset(self):
+        return Barber.objects.only('area')
+
+
+
 # class addService(APIView):
 #     def post(self,request):
 #         barber = Barber.objects.get(id = request.user.id)
@@ -68,7 +76,7 @@ class addService(ModelViewSet):
 
     def get_queryset(self):
         (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
-        return Service.objects.filter(barber_id = barber)
+        return Service.objects.filter(barber_id = barber).all()
     
     def get_serializer_context(self):
         return {'user_id':self.request.user.id}

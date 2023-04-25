@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from Auth.models import User
+from Customer.models import Customer
 
   
 class Rate(models.Model):
@@ -8,6 +9,24 @@ class Rate(models.Model):
   stars = models.IntegerField()
 
 class Barber(models.Model):
+
+  area_chices = (
+    ('Tehranpars','Tehranpars'),
+    ('Nazi Abad','Nazi Abad'),
+    ('Narmak','Narmak'),
+    ('Tajrish','Tajrish'),
+    ('Gheytariye','Gheytariye'),
+    ('Marzdaran','Marzdaran'),
+    ('Janat Abad','Janat Abad'),
+    ('Vanak','Vanak'),
+    ('Enghelab','Enghelab'),
+    ('Valiasr','Valiasr'),
+    ('Saadat Abad','Saadat Abad'),
+    ('Piroozi','Piroozi'),
+    ('Jordan','Jordan'),
+  )
+
+
   user = models.ForeignKey(
         User, on_delete=models.CASCADE,related_name='users',null=False)
   BarberShop = models.CharField(max_length=255,unique=True,null=False)
@@ -15,7 +34,7 @@ class Barber(models.Model):
   Parvaneh = models.CharField(max_length=10,unique=True,null=False)
   phone_Number = models.CharField(max_length=11,unique = True,null=False)
   # email = models.EmailField(unique=True)
-  area = models.CharField(max_length=255,null=False)
+  area = models.CharField(max_length=255,null=False,choices=area_chices)
   address = models.CharField(max_length=255,null=False)
   rate = models.FloatField(default=1,null=False)
   background = models.ImageField(upload_to='Barber/backg',null=False,default='default_profile.png')
@@ -52,7 +71,11 @@ class Service(models.Model):
   # catg = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,related_name='services')
 
 
-
+class OrderServices(models.Model):
+  service = models.ForeignKey(Service,on_delete=models.CASCADE,related_name='services')
+  customer = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='customer')
+  barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='barber')
+  time = models.TimeField()
 
 
 

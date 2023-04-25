@@ -6,6 +6,6 @@ class BarberRateFilter(FilterSet):
     class Meta:
         model = Barber
         fields = {
-            'address':['exact'],
-            'rate':['gt']
+            'area':['exact'],
+            'rate':['gte','lte']
         }

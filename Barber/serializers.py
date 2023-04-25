@@ -6,7 +6,7 @@ from Auth.serializer import UserSerializer
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta():
         model = Service
-        fields = ['service','price','service_pic','category']
+        fields = ['id','service','price','service_pic','category']
 
 class CreateServiceSerializer(serializers.ModelSerializer):
     class Meta():
@@ -97,6 +97,12 @@ class BarberProfileSerializer(serializers.ModelSerializer):
         user_serializer.save()
 
         return instance
+
+
+class BarberAreasSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Barber
+        fields = ['area']
 
 
 class RateSerializer(serializers.ModelSerializer):
