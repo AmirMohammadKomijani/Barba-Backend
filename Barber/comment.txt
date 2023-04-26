@@ -164,3 +164,150 @@ sprint 2
 
 
 ----------------------------------------------------------
+
+
+sprint 3
+
+    # def create(self,validated_data):
+    #     services = Service.objects.create(**validated_data)
+    #     return services
+    
+    # def update(self, instance, validated_data):
+    #     instance.service = validated_data.get('service',instance.service)
+    #     instance.price = validated_data.get('price',instance.price)
+    #     instance.service_pic = validated_data.get('service_pic',instance.service_pic)
+    #     instance.category = validated_data.get('category',instance.category)
+
+    #     instance.save()
+    #     return instance
+        
+        
+# class CategorySerializer(serializers.ModelSerializer):
+#     services = ServiceSerializer()
+#     class Meta():
+#         model = Category
+#         fields = ['category','barber','services']
+    
+    # def create(self, validated_data):
+    #     services_data = validated_data.pop('services', [])
+    #     category = Category.objects.create(**validated_data)
+    #     for service_data in services_data:
+    #         Service.objects.create(catg=category, **service_data)
+    #     return category
+    
+    # def update(self, instance, validated_data):
+    #     instance.category = validated_data.get('category',instance.category)
+    #     instance.barber = validated_data.get('barber',instance.barber)
+
+    #     service_data = validated_data.pop('services', None)
+    #     if service_data:
+    #         service = instance.service
+    #         service_serializer = ServiceSerializer(service, data=service_data)
+    #         service_serializer.is_valid(raise_exception=True)
+    #         service_serializer.save()
+
+    #     instance.save()
+    #     return instance
+
+
+
+# class addService(APIView):
+#     def post(self,request):
+#         barber = Barber.objects.get(id = request.user.id)
+#         serializer = ServiceSerializer(data=request.data)
+#         if serializer.is_valid():
+#             service = serializer.save(barber=barber)           
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+# class addService(ListCreateAPIView):
+#     serializer_class = ServiceSerializer
+#     # permission_classes = [IsAuthenticated]
+    
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             # retrieve all services for the authenticated barber
+#             return Service.objects.filter(barber_id=self.request.user.barber.id)
+#         else:
+#             return Service.objects.none()
+    
+#     def perform_create(self, serializer):
+#         # create a new service row in the database for the authenticated barber
+#         serializer.save(barber_id=self.request.user.barber.id)
+
+
+
+# class addService(ListCreateAPIView):
+#     queryset = Service.objects.all()
+#     serializer_class = ServiceSerializer
+
+
+
+
+
+
+# class addCategory(ModelViewSet):
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
+
+# class addService(ModelViewSet):
+#     queryset = Service.objects.all()
+#     serializer_class = ServiceSerializer
+#     # # permission_classes = [IsAuthenticated]
+    
+# #     def list(self,request):
+# #         serv=Service.objects.all()
+# #         serializer=ServiceSerializer(serv,many=True)
+# #         return Response(serializer.data)
+    
+# #     def create(self,request):
+# #         serializer=ServiceSerializer(data=request.data)
+# #         if serializer.is_valid():
+# #             serializer.save()
+# #             return Response({'msg':'Data  created'}, status=status.HTTP_201_CREATED)
+# #         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
+#     @action(detail=False,methods=['GET','POST'], permission_classes = [IsAuthenticated])
+#     def add(self,request):
+#         barber = Service.objects.get(barber_id=request.user.barber.id)
+
+#         if request.method == 'GET':
+#             serializer = ServiceSerializer(barber,many=True)
+#             return Response(serializer.data)
+#         # elif request.method == 'PUT':
+#         #     serializer = ServiceSerializer(barber, data=request.data)
+#         #     serializer.is_valid(raise_exception=True)
+#         #     serializer.save()
+#         #     return Response(serializer.data)
+#         elif request.method == 'POST':
+#             serializer = ServiceSerializer(barber, data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)
+ 
+
+# class BarberManagement(ModelViewSet):
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
+
+#     @action(detail=False,methods=['GET','PUT','POSt'], permission_classes = [IsAuthenticated])
+#     def addService(self,request):
+#         barber = Barber.objects.get(id = request.user.id)
+
+#         if request.method == 'GET':
+#             serializer = CategorySerializer(barber)
+#             return Response(serializer.data)
+#         elif request.method == 'PUT':
+#             serializer = CategorySerializer(barber,data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)
+#         elif request.method == 'POST':
+#             serializer = CategorySerializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return Response(serializer.data)

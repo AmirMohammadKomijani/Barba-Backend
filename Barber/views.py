@@ -6,12 +6,48 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
-from .models import Barber,Rate,Service
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer
+from .models import Barber,Rate,Service,OrderServices
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer,OrderServiceSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from Auth.models import User
+from Customer.models import Customer
+
+
+
+# class OrderServiceView(ModelViewSet):
+#     queryset = OrderServices.objects.all()
+#     serializer_class = OrderServiceSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     # def get_queryset(self):
+#     #     return OrderServices.objects.filter(service_id = self.kwargs['pk'])
+
+#     def get_serializer_context(self):
+#         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
+
+
+class OrderServiceView(ModelViewSet):
+    # queryset = OrderServices.objects.all()
+    serializer_class = OrderServiceSerializer
+    permission_classes = [IsAuthenticated]
+
+
+    # def create(self, request, *args, **kwargs):
+    #     serializer = OrderServiceSerializer(data=request.data,
+    #         context={'user_id':self.request.user.id})
+    #     serializer.is_valid(raise_exception=True)
+    #     order = serializer.save()
+    #     serializer = OrderServiceSerializer(order)
+    #     return Response(serializer.data)
+
+    def get_serializer_context(self):
+        return {'user_id':self.request.user.id}
+    
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        return OrderServices.objects.filter(customer_id = customer)
 
 
 
@@ -54,21 +90,10 @@ class Areas(ModelViewSet):
 
 
 
-# class addService(APIView):
-#     def post(self,request):
-#         barber = Barber.objects.get(id = request.user.id)
-#         serializer = ServiceSerializer(data=request.data)
-#         if serializer.is_valid():
-#             service = serializer.save(barber=barber)           
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 class addService(ModelViewSet):
     # queryset = Service.objects.all()
     # serializer_class = ServiceSerializer
-
+    permission_classes = [IsAuthenticated]
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateServiceSerializer
@@ -80,97 +105,6 @@ class addService(ModelViewSet):
     
     def get_serializer_context(self):
         return {'user_id':self.request.user.id}
-
-
-
-
-# class addService(ListCreateAPIView):
-#     serializer_class = ServiceSerializer
-#     # permission_classes = [IsAuthenticated]
-    
-#     def get_queryset(self):
-#         if self.request.user.is_authenticated:
-#             # retrieve all services for the authenticated barber
-#             return Service.objects.filter(barber_id=self.request.user.barber.id)
-#         else:
-#             return Service.objects.none()
-    
-#     def perform_create(self, serializer):
-#         # create a new service row in the database for the authenticated barber
-#         serializer.save(barber_id=self.request.user.barber.id)
-
-
-
-# class addService(ListCreateAPIView):
-#     queryset = Service.objects.all()
-#     serializer_class = ServiceSerializer
-
-
-
-
-
-
-# class addCategory(ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
-
-# class addService(ModelViewSet):
-#     queryset = Service.objects.all()
-#     serializer_class = ServiceSerializer
-#     # # permission_classes = [IsAuthenticated]
-    
-# #     def list(self,request):
-# #         serv=Service.objects.all()
-# #         serializer=ServiceSerializer(serv,many=True)
-# #         return Response(serializer.data)
-    
-# #     def create(self,request):
-# #         serializer=ServiceSerializer(data=request.data)
-# #         if serializer.is_valid():
-# #             serializer.save()
-# #             return Response({'msg':'Data  created'}, status=status.HTTP_201_CREATED)
-# #         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
-
-#     @action(detail=False,methods=['GET','POST'], permission_classes = [IsAuthenticated])
-#     def add(self,request):
-#         barber = Service.objects.get(barber_id=request.user.barber.id)
-
-#         if request.method == 'GET':
-#             serializer = ServiceSerializer(barber,many=True)
-#             return Response(serializer.data)
-#         # elif request.method == 'PUT':
-#         #     serializer = ServiceSerializer(barber, data=request.data)
-#         #     serializer.is_valid(raise_exception=True)
-#         #     serializer.save()
-#         #     return Response(serializer.data)
-#         elif request.method == 'POST':
-#             serializer = ServiceSerializer(barber, data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             return Response(serializer.data)
- 
-
-# class BarberManagement(ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
-
-#     @action(detail=False,methods=['GET','PUT','POSt'], permission_classes = [IsAuthenticated])
-#     def addService(self,request):
-#         barber = Barber.objects.get(id = request.user.id)
-
-#         if request.method == 'GET':
-#             serializer = CategorySerializer(barber)
-#             return Response(serializer.data)
-#         elif request.method == 'PUT':
-#             serializer = CategorySerializer(barber,data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             return Response(serializer.data)
-#         elif request.method == 'POST':
-#             serializer = CategorySerializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             return Response(serializer.data)
 
 
         

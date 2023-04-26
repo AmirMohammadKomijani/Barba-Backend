@@ -77,6 +77,9 @@ class OrderServices(models.Model):
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='barber')
   time = models.TimeField()
 
+  class Meta:
+      unique_together = ('barber', 'time',)
+
 
 
 
