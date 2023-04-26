@@ -122,7 +122,7 @@ SIMPLE_JWT = {
 }
 
 
-AUTH_USER_MODEL = 'Auth.User'
+# AUTH_USER_MODEL = 'Auth.User'
 
 
 

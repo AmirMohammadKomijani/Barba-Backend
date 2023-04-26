@@ -65,7 +65,7 @@ class Service(models.Model):
   
   service = models.CharField(blank=True,max_length=255)
   price = models.FloatField(default=0)
-  service_pic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
+  servicePic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
   category = models.CharField(choices=catg_choices,max_length=20)
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='services',null=False,unique=False)
   # catg = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,related_name='services')

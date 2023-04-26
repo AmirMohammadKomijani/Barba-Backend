@@ -8,12 +8,12 @@ from Customer.models import Customer
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta():
         model = Service
-        fields = ['id','service','price','service_pic','category']
+        fields = ['id','service','price','servicePic','category']
 
 class CreateServiceSerializer(serializers.ModelSerializer):
     class Meta():
         model = Service
-        fields = ['service','price','service_pic','category']
+        fields = ['service','price','servicePic','category']
 
     
     def save(self, **kwargs):
