@@ -1,14 +1,41 @@
 from rest_framework import serializers
-from .models import Barber,Rate,Service,OrderServices
+from .models import Barber,Rate,Service,OrderServices,CategoryService,Category
 from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
+
+
+class CategoryServiceSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = CategoryService
+        fields = ['id','service','price','servicePic']
+    
+    def save(self, **kwargs):
+        (category,created) = Category.objects.get_or_create(id = self.context['category_id'])
+        self.validated_data.update({'category':category,**kwargs})
+        service = CategoryService.objects.create(**self.validated_data)
+        return service
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    categories = CategoryServiceSerializer(many=True,read_only=True)
+    class Meta():
+        model = Category
+        fields = ['id','category','categories']
+    
+    def save(self, **kwargs):
+        (barber,created) = Barber.objects.get_or_create(id=self.context['barber_id'])
+        self.validated_data.update({'barber':barber,**kwargs})
+        catg = Category.objects.create(**self.validated_data)
+        return catg
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta():
         model = Service
         fields = ['id','service','price','servicePic','category']
+
+
 
 class CreateServiceSerializer(serializers.ModelSerializer):
     class Meta():
@@ -25,10 +52,11 @@ class CreateServiceSerializer(serializers.ModelSerializer):
 
 
 class BarberSerializer(serializers.ModelSerializer):
-    services = ServiceSerializer(many=True)
+    # services = ServiceSerializer(many=True)
+    categories = CategorySerializer(many=True)
     class Meta:
         model = Barber
-        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','services']
+        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories']
 
 
 class BarberProfileSerializer(serializers.ModelSerializer):

@@ -6,8 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
-from .models import Barber,Rate,Service,OrderServices
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer,OrderServiceSerializer
+from .models import Barber,Rate,Service,OrderServices,Category,CategoryService
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -26,6 +26,26 @@ from Customer.models import Customer
 
 #     def get_serializer_context(self):
 #         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
+
+
+class addCategoryView(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def get_serializer_context(self):
+        return {'barber_id':self.request.user.id}
+
+
+class addCategoryServiceView(ModelViewSet):
+    # queryset = CategoryService.objects.all()
+    serializer_class = CategoryServiceSerializer
+
+    def get_serializer_context(self):
+        return {'category_id':self.kwargs['category_pk']}
+
+    def get_queryset(self):
+        (category,created) = Category.objects.get_or_create(id=self.kwargs['category_pk'])
+        return CategoryService.objects.filter(category_id = category)
 
 
 class OrderServiceView(ModelViewSet):
@@ -48,6 +68,24 @@ class OrderServiceView(ModelViewSet):
     def get_queryset(self):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
         return OrderServices.objects.filter(customer_id = customer)
+
+
+
+class addService(ModelViewSet):
+    # queryset = Service.objects.all()
+    # serializer_class = ServiceSerializer
+    permission_classes = [IsAuthenticated]
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateServiceSerializer
+        return ServiceSerializer
+
+    def get_queryset(self):
+        (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
+        return Service.objects.filter(barber_id = barber).all()
+    
+    def get_serializer_context(self):
+        return {'user_id':self.request.user.id}
 
 
 
@@ -84,28 +122,11 @@ class BarberProfileView(ModelViewSet):
 
 class Areas(ModelViewSet):
     serializer_class = BarberAreasSerializer
+    pagination_class=None
 
     def get_queryset(self):
-        return Barber.objects.only('area')
-
-
-
-class addService(ModelViewSet):
-    # queryset = Service.objects.all()
-    # serializer_class = ServiceSerializer
-    permission_classes = [IsAuthenticated]
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CreateServiceSerializer
-        return ServiceSerializer
-
-    def get_queryset(self):
-        (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
-        return Service.objects.filter(barber_id = barber).all()
-    
-    def get_serializer_context(self):
-        return {'user_id':self.request.user.id}
-
+        return Barber.objects.values('area').distinct()
+        
 
         
 class RateView(ModelViewSet):

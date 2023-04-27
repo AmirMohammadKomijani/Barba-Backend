@@ -42,17 +42,24 @@ class Barber(models.Model):
 
 
 
-# class Category(models.Model):
+class Category(models.Model):
   
-#   catg_choices = (
-#     ('hair','hair'),
-#     ('skin','skin'),
-#     ('makeup','makeup'),
-#     ('nail','nail'),
-#   )
+  catg_choices = (
+    ('hair','hair'),
+    ('skin','skin'),
+    ('makeup','makeup'),
+    ('nail','nail'),
+  )
   
-#   category = models.CharField(choices=catg_choices,max_length=20)
-#   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,null=True,related_name='categories')
+  category = models.CharField(choices=catg_choices,max_length=20)
+  barber = models.ForeignKey(Barber,on_delete=models.CASCADE,null=True,related_name='categories')
+
+
+class CategoryService(models.Model):
+  service = models.CharField(blank=True,max_length=255)
+  price = models.FloatField(default=0)
+  servicePic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
+  category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='categories')
 
 
 class Service(models.Model):

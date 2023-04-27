@@ -18,6 +18,10 @@ router.register('order',views.OrderServiceView,basename='order')
 
 
 
+nestedRouter.register('categories', views.addCategoryView, basename='categories')
+service_router = nested.NestedSimpleRouter(nestedRouter, 'categories', lookup='category')
+service_router.register('service', views.addCategoryServiceView, basename='services')
+
 # router.register('baseprofile',views.BarberBaseProfileView,basename='Base-profile')
 # urlpatterns = [
 #             # path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
@@ -34,5 +38,5 @@ router.register('order',views.OrderServiceView,basename='order')
 
 # barber_router.register('images',views.BarberShopImagesView,basename='images')
 
-urlpatterns = router.urls + nestedRouter.urls #+ barber_service.urls
+urlpatterns = router.urls + nestedRouter.urls + service_router.urls
 

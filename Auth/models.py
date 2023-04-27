@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin,Group,Permission,AbstractUser
+from django.contrib.auth.models import Group,Permission,AbstractUser
 
 
 class User(AbstractUser):
