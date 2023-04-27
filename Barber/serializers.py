@@ -18,10 +18,10 @@ class CategoryServiceSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    categories = CategoryServiceSerializer(many=True,read_only=True)
+    categoryServices = CategoryServiceSerializer(many=True,read_only=True)
     class Meta():
         model = Category
-        fields = ['id','category','categories']
+        fields = ['id','category','categoryServices']
     
     def save(self, **kwargs):
         (barber,created) = Barber.objects.get_or_create(id=self.context['barber_id'])
