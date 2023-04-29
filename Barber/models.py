@@ -32,7 +32,7 @@ class Barber(models.Model):
   BarberShop = models.CharField(max_length=255,unique=True,null=False)
   Owner = models.CharField(max_length=255,null=False)
   Parvaneh = models.CharField(max_length=10,unique=True,null=False)
-  phone_Number = models.CharField(max_length=11,unique = True,null=False)
+  phone_Number = models.CharField(max_length=11,unique = True,null=True)
   # email = models.EmailField(unique=True)
   area = models.CharField(max_length=255,null=False,choices=area_chices)
   address = models.CharField(max_length=255,null=False)

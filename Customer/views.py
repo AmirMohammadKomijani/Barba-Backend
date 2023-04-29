@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.generics import RetrieveUpdateAPIView 
 from .models import Customer
-from .serializers import CustomerProfileSerializer
+from .serializers import CustomerProfileSerializer,Customers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -10,7 +10,7 @@ from rest_framework.viewsets import ModelViewSet
 
 class CustomerProfileView(ModelViewSet):
     queryset = Customer.objects.all()
-    serializer_class = CustomerProfileSerializer
+    serializer_class = Customers
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
