@@ -12,7 +12,7 @@ router = routers.SimpleRouter()
 nestedRouter.register('info',views.BarberView,basename='info')
 router.register('profile',views.BarberProfileView,basename='profile')
 # router.register('category',views.addCategory)
-router.register('service',views.addService,basename='add service')
+# router.register('service',views.addService,basename='add service')
 router.register('area',views.Areas,basename='show areas')
 router.register('order',views.OrderServiceView,basename='order')
 

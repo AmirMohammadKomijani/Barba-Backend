@@ -6,8 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
-from .models import Barber,Rate,Service,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,ServiceSerializer,CreateServiceSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer
+from .models import Barber,Rate,OrderServices,Category,CategoryService
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -71,21 +71,21 @@ class OrderServiceView(ModelViewSet):
 
 
 
-class addService(ModelViewSet):
-    # queryset = Service.objects.all()
-    # serializer_class = ServiceSerializer
-    permission_classes = [IsAuthenticated]
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CreateServiceSerializer
-        return ServiceSerializer
+# class addService(ModelViewSet):
+#     # queryset = Service.objects.all()
+#     # serializer_class = ServiceSerializer
+#     permission_classes = [IsAuthenticated]
+#     def get_serializer_class(self):
+#         if self.request.method == 'POST':
+#             return CreateServiceSerializer
+#         return ServiceSerializer
 
-    def get_queryset(self):
-        (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
-        return Service.objects.filter(barber_id = barber).all()
+#     def get_queryset(self):
+#         (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
+#         return Service.objects.filter(barber_id = barber).all()
     
-    def get_serializer_context(self):
-        return {'user_id':self.request.user.id}
+#     def get_serializer_context(self):
+#         return {'user_id':self.request.user.id}
 
 
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Barber,Rate,Service,OrderServices,CategoryService,Category
+from .models import Barber,Rate,OrderServices,CategoryService,Category
 from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
@@ -23,6 +23,11 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id','category','categoryServices']
     
+    def update(self, instance, validated_data):
+        instance.category = validated_data.get('category',instance.category)
+        instance.save()
+        return instance
+    
     def save(self, **kwargs):
         (barber,created) = Barber.objects.get_or_create(id=self.context['barber_id'])
         self.validated_data.update({'barber':barber,**kwargs})
@@ -30,24 +35,24 @@ class CategorySerializer(serializers.ModelSerializer):
         return catg
 
 
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Service
-        fields = ['id','service','price','servicePic','category']
+# class ServiceSerializer(serializers.ModelSerializer):
+#     class Meta():
+#         model = Service
+#         fields = ['id','service','price','servicePic','category']
 
 
 
-class CreateServiceSerializer(serializers.ModelSerializer):
-    class Meta():
-        model = Service
-        fields = ['service','price','servicePic','category']
+# class CreateServiceSerializer(serializers.ModelSerializer):
+#     class Meta():
+#         model = Service
+#         fields = ['service','price','servicePic','category']
 
     
-    def save(self, **kwargs):
-        barber, created = Barber.objects.get_or_create(user_id=self.context['user_id'])
-        self.validated_data.update({'barber': barber, **kwargs})
-        service = Service.objects.create(**self.validated_data)
-        return service
+#     def save(self, **kwargs):
+#         barber, created = Barber.objects.get_or_create(user_id=self.context['user_id'])
+#         self.validated_data.update({'barber': barber, **kwargs})
+#         service = Service.objects.create(**self.validated_data)
+#         return service
     
 
 
