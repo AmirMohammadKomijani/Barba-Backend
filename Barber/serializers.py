@@ -4,6 +4,29 @@ from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
 
+class OrderServiceSerializer(serializers.ModelSerializer):
+    # service_id = serializers.PrimaryKeyRelatedField(source='service', queryset=Service.objects.all())
+
+    class Meta:
+        model = OrderServices
+        fields = ['id','service','barber', 'time','date','status']
+
+    
+    # def validate_time(self, barber_id):
+    #     if OrderServices.objects.filter(barber_id = barber_id):
+    #         if OrderServices.objects.only('time').exists():
+    #             raise ValueError('this time has been set')
+    
+    
+    def save(self, **kwargs):
+        customer, created = Customer.objects.get_or_create(user_id=self.context['user_id'])
+        # barber, created = Barber.objects.get_or_create(id=self.context['barber_id'])
+        # service, created = Service.objects.get_or_create(id=self.context['service_id'])
+        # self.validated_data.update({'customer': customer,'barber':barber,'service':service, **kwargs})
+        self.validated_data.update({'customer':customer,**kwargs})
+        order = OrderServices.objects.create(**self.validated_data)
+        return order
+
 
 class CategoryServiceSerializer(serializers.ModelSerializer):
     class Meta():
@@ -33,27 +56,6 @@ class CategorySerializer(serializers.ModelSerializer):
         self.validated_data.update({'barber':barber,**kwargs})
         catg = Category.objects.create(**self.validated_data)
         return catg
-
-
-# class ServiceSerializer(serializers.ModelSerializer):
-#     class Meta():
-#         model = Service
-#         fields = ['id','service','price','servicePic','category']
-
-
-
-# class CreateServiceSerializer(serializers.ModelSerializer):
-#     class Meta():
-#         model = Service
-#         fields = ['service','price','servicePic','category']
-
-    
-#     def save(self, **kwargs):
-#         barber, created = Barber.objects.get_or_create(user_id=self.context['user_id'])
-#         self.validated_data.update({'barber': barber, **kwargs})
-#         service = Service.objects.create(**self.validated_data)
-#         return service
-    
 
 
 class BarberSerializer(serializers.ModelSerializer):
@@ -95,30 +97,6 @@ class BarberAreasSerializer(serializers.ModelSerializer):
     class Meta():
         model = Barber
         fields = ['area']
-
-
-class OrderServiceSerializer(serializers.ModelSerializer):
-    # service_id = serializers.PrimaryKeyRelatedField(source='service', queryset=Service.objects.all())
-
-    class Meta:
-        model = OrderServices
-        fields = ['id','service','barber', 'time']
-
-    
-    # def validate_time(self, barber_id):
-    #     if OrderServices.objects.filter(barber_id = barber_id):
-    #         if OrderServices.objects.only('time').exists():
-    #             raise ValueError('this time has been set')
-    
-    
-    def save(self, **kwargs):
-        customer, created = Customer.objects.get_or_create(user_id=self.context['user_id'])
-        # barber, created = Barber.objects.get_or_create(id=self.context['barber_id'])
-        # service, created = Service.objects.get_or_create(id=self.context['service_id'])
-        # self.validated_data.update({'customer': customer,'barber':barber,'service':service, **kwargs})
-        self.validated_data.update({'customer':customer,**kwargs})
-        order = OrderServices.objects.create(**self.validated_data)
-        return order
 
 
 class RateSerializer(serializers.ModelSerializer):

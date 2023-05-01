@@ -3,6 +3,8 @@ from django.conf import settings
 from Auth.models import User
 from Customer.models import Customer
 
+import datetime
+
   
 class Rate(models.Model):
   barbershop = models.ForeignKey('Barber',on_delete=models.SET_NULL,null=True,related_name='barbers')
@@ -66,13 +68,22 @@ class CategoryService(models.Model):
 
 
 class OrderServices(models.Model):
+  
+  order_status = (
+    ('ordering','ordering'),
+    ('ordered','ordered'),
+    ('confirmed','confirmed'),
+    ('paid','paid'),
+  )
+  
   service = models.ForeignKey(CategoryService,on_delete=models.CASCADE,related_name='services')
   customer = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='customer')
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='barber')
   time = models.TimeField()
-
+  date = models.DateField(default=datetime.date.today)
+  status = models.CharField(max_length=9,choices=order_status,default='ordering')
   class Meta:
-      unique_together = ('barber', 'time',)
+      unique_together = ('barber', 'time','date')
 
 
 
