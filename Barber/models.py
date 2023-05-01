@@ -62,20 +62,7 @@ class CategoryService(models.Model):
   category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='categoryServices')
 
 
-# class Service(models.Model):
-#   catg_choices = (
-#     ('hair','hair'),
-#     ('skin','skin'),
-#     ('makeup','makeup'),
-#     ('nail','nail'),
-#     )
-  
-#   service = models.CharField(blank=True,max_length=255)
-#   price = models.FloatField(default=0)
-#   servicePic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
-#   category = models.CharField(choices=catg_choices,max_length=20)
-#   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='services',null=False,unique=False)
-  # catg = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,related_name='services')
+
 
 
 class OrderServices(models.Model):
@@ -92,10 +79,6 @@ class OrderServices(models.Model):
 
 
 
-# class BarberShopImages(models.Model):
-#   barbershop = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='images')
-#   background = models.ImageField(upload_to='Barber/backg')
-#   logo = models.ImageField(upload_to='Barber/Logo')
 
 
 
