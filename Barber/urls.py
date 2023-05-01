@@ -22,21 +22,7 @@ nestedRouter.register('categories', views.addCategoryView, basename='categories'
 service_router = nested.NestedSimpleRouter(nestedRouter, 'categories', lookup='category')
 service_router.register('service', views.addCategoryServiceView, basename='services')
 
-# router.register('baseprofile',views.BarberBaseProfileView,basename='Base-profile')
-# urlpatterns = [
-#             # path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
-#             #path('baseprofile/<int:pk>',views.BarberBaseProfileView.as_view()),
-# ]
-# urlpatterns = [
-#         # path('baseprofile/',views.BarberBaseProfileView.as_view()),
-#         path('add/',views.addService.as_view())
-# ]
 
-#-----
-# barber_service = nested.NestedDefaultRouter(nestedRouter,'info',lookup='info')
-# barber_service.register('services',views.OrderServiceView,basename = 'order service')
-
-# barber_router.register('images',views.BarberShopImagesView,basename='images')
 
 urlpatterns = router.urls + nestedRouter.urls + service_router.urls
 
