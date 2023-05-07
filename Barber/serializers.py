@@ -4,6 +4,14 @@ from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
 
+
+
+class BasketBarberInfoSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Barber
+        fields = ['BarberShop','phone_Number','area','address']
+
+
 class OrderServiceSerializer(serializers.ModelSerializer):
     # service_id = serializers.PrimaryKeyRelatedField(source='service', queryset=Service.objects.all())
 
@@ -57,7 +65,15 @@ class CategorySerializer(serializers.ModelSerializer):
         catg = Category.objects.create(**self.validated_data)
         return catg
 
+class CustomerBasketSerializer(serializers.ModelSerializer):
+    service = CategoryServiceSerializer()
+    barber = BasketBarberInfoSerializer()
+    class Meta():
+        model = OrderServices
+        fields = ['id','service','barber', 'time','date','status']
 
+    
+    
 class BarberSerializer(serializers.ModelSerializer):
     # services = ServiceSerializer(many=True)
     categories = CategorySerializer(many=True)

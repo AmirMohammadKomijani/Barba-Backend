@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,CustomerBasketSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -26,6 +26,16 @@ from Customer.models import Customer
 
 #     def get_serializer_context(self):
 #         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
+
+
+class CustomerBasketView(ModelViewSet):
+    #queryset = OrderServices.objects.all()
+    serializer_class = CustomerBasketSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        return OrderServices.objects.filter(customer_id = customer)
 
 
 class addCategoryView(ModelViewSet):

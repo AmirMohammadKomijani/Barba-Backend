@@ -74,6 +74,9 @@ class OrderServices(models.Model):
     ('ordered','ordered'),
     ('confirmed','confirmed'),
     ('paid','paid'),
+    ('BarberCancelled','BarberCancelled'),
+    ('CustomerCancelled','CustomerCancelled'),
+    ('CustomerNotCome','CustomerNotCome'),
   )
   
   service = models.ForeignKey(CategoryService,on_delete=models.CASCADE,related_name='services')
@@ -81,7 +84,7 @@ class OrderServices(models.Model):
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='barber')
   time = models.TimeField()
   date = models.DateField(default=datetime.date.today)
-  status = models.CharField(max_length=9,choices=order_status,default='ordering')
+  status = models.CharField(max_length=20,choices=order_status,default='ordering')
   class Meta:
       unique_together = ('barber', 'time','date')
 
