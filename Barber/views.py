@@ -29,9 +29,13 @@ from Customer.models import Customer
 
 
 class BarberPanelView(ModelViewSet):
-    queryset = OrderServices.objects.all()
+    #queryset = OrderServices.objects.all()
     serializer_class = BarberPanelSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        barber = Barber.objects.get(user_id = self.request.user.id)
+        return OrderServices.objects.filter(barber_id = barber)
 
 
 class CustomerBasketView(ModelViewSet):

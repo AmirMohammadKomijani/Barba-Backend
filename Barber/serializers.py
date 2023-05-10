@@ -125,13 +125,13 @@ class RateSerializer(serializers.ModelSerializer):
 class ServiceBarberPanelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryService
-        fields = ['service','price']
+        fields = ['id','service','price']
 
 
 class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['full_name','profile_pic']
+        fields = ['id','full_name','profile_pic']
 
         
 class BarberPanelSerializer(serializers.ModelSerializer):
@@ -139,7 +139,7 @@ class BarberPanelSerializer(serializers.ModelSerializer):
     customer = CustomerInfoBarberPanelSerializer()
     class Meta:
         model = OrderServices
-        fields = ['service','customer','date','time','status']
+        fields = ['id','service','customer','date','time','status']
 
 
 
