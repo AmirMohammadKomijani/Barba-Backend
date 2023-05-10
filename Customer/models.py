@@ -13,3 +13,6 @@ class Customer(models.Model):
     credit = models.DecimalField( max_digits=5, decimal_places=2, default=0.00, blank=True)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE)
+    
+    def full_name(self):
+        return self.first_name + " " + self.last_name

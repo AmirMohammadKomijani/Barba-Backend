@@ -86,6 +86,7 @@ class OrderServices(models.Model):
   time = models.TimeField()
   date = models.DateField(default=datetime.date.today)
   status = models.CharField(max_length=20,choices=order_status,default='ordering')
+  
   class Meta:
       unique_together = ('barber', 'time','date')
 

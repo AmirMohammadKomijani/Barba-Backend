@@ -121,9 +121,21 @@ class RateSerializer(serializers.ModelSerializer):
         fields = ['barbershop','stars']
 
 
-# class BarberPanelSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = 
+
+class ServiceBarberPanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryService
+        fields = ['service','price']
+
+
+# class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
+
+
+        
+class BarberPanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderServices
+        fields = ['service','customer','date','time','status']
 
 
 
