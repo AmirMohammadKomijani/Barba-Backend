@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from Auth.models import User
 from Customer.models import Customer
-
 import datetime
 
   

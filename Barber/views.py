@@ -7,11 +7,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
 from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
-from .filters import BarberRateFilter
+from .filters import BarberRateFilter,BarberPanelPriceFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from Auth.models import User
 from Customer.models import Customer
+import datetime
 
 
 
@@ -32,8 +33,9 @@ class BarberPanelView(ModelViewSet):
     # serializer_class = Get_BarberPanelSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['status']
-    ordering_fields = ['date','price']
+    filterset_fields = ['status','date']
+    # filterset_class = BarberPanelPriceFilter
+    ordering_fields = ['date']
 
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -43,7 +45,7 @@ class BarberPanelView(ModelViewSet):
 
     def get_queryset(self):
         barber = Barber.objects.get(user_id = self.request.user.id)
-        return OrderServices.objects.filter(barber_id = barber)
+        return OrderServices.objects.filter(barber_id = barber)#.filter(date = datetime.date.today())
 
 
 class CustomerBasketView(ModelViewSet):

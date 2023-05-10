@@ -32,8 +32,8 @@ class OrderServiceSerializer(serializers.ModelSerializer):
         # service, created = Service.objects.get_or_create(id=self.context['service_id'])
         # self.validated_data.update({'customer': customer,'barber':barber,'service':service, **kwargs})
         self.validated_data.update({'customer':customer,**kwargs})
-        #order = OrderServices.objects.create(**self.validated_data)
-        #return order
+        order = OrderServices.objects.create(**self.validated_data)
+        return order
 
 
 class CategoryServiceSerializer(serializers.ModelSerializer):
