@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,CustomerBasketSerializer
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,CustomerBasketSerializer,BarberPanelSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -28,6 +28,9 @@ from Customer.models import Customer
 #         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
 
 
+class BarberPanelView(ModelViewSet):
+    queryset = OrderServices.objects.all()
+    serializer_class = BarberPanelSerializer
 
 
 

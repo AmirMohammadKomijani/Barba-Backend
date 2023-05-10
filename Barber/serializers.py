@@ -128,11 +128,15 @@ class ServiceBarberPanelSerializer(serializers.ModelSerializer):
         fields = ['service','price']
 
 
-# class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
-
+class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['full_name','profile_pic']
 
         
 class BarberPanelSerializer(serializers.ModelSerializer):
+    service = ServiceBarberPanelSerializer()
+    customer = CustomerInfoBarberPanelSerializer()
     class Meta:
         model = OrderServices
         fields = ['service','customer','date','time','status']
