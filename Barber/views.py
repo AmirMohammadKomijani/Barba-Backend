@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,CustomerBasketSerializer,BarberPanelSerializer
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
 from .filters import BarberRateFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -29,11 +29,16 @@ from Customer.models import Customer
 
 class BarberPanelView(ModelViewSet):
     #queryset = OrderServices.objects.all()
-    serializer_class = BarberPanelSerializer
+    # serializer_class = Get_BarberPanelSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['status']
     ordering_fields = ['date','price']
+
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return Put_BarberPanelSerializer
+        return Get_BarberPanelSerializer
     
 
     def get_queryset(self):
@@ -43,9 +48,13 @@ class BarberPanelView(ModelViewSet):
 
 class CustomerBasketView(ModelViewSet):
     #queryset = OrderServices.objects.all()
-    serializer_class = CustomerBasketSerializer
+    # serializer_class = Get_CustomerBasketSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return Put_CustomerBasketSerializer
+        return Get_CustomerBasketSerializer
     def get_queryset(self):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
         return OrderServices.objects.filter(customer_id = customer)

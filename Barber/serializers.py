@@ -32,8 +32,8 @@ class OrderServiceSerializer(serializers.ModelSerializer):
         # service, created = Service.objects.get_or_create(id=self.context['service_id'])
         # self.validated_data.update({'customer': customer,'barber':barber,'service':service, **kwargs})
         self.validated_data.update({'customer':customer,**kwargs})
-        order = OrderServices.objects.create(**self.validated_data)
-        return order
+        #order = OrderServices.objects.create(**self.validated_data)
+        #return order
 
 
 class CategoryServiceSerializer(serializers.ModelSerializer):
@@ -65,12 +65,27 @@ class CategorySerializer(serializers.ModelSerializer):
         catg = Category.objects.create(**self.validated_data)
         return catg
 
-class CustomerBasketSerializer(serializers.ModelSerializer):
+class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
     barber = BasketBarberInfoSerializer()
     class Meta():
         model = OrderServices
         fields = ['id','service','barber', 'time','date','status']
+    
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status',instance.status)
+        instance.save()
+        return instance
+    
+class Put_CustomerBasketSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = OrderServices
+        fields = ['status']
+    
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status',instance.status)
+        instance.save()
+        return instance
 
     
     
@@ -133,14 +148,35 @@ class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id','full_name','profile_pic']
 
-        
-class BarberPanelSerializer(serializers.ModelSerializer):
+
+
+
+
+
+
+
+
+class Get_BarberPanelSerializer(serializers.ModelSerializer):
     service = ServiceBarberPanelSerializer()
     customer = CustomerInfoBarberPanelSerializer()
     class Meta:
         model = OrderServices
         fields = ['id','service','customer','date','time','status']
 
+    # def update(self, instance, validated_data):
+    #     instance.status = validated_data.get('status',instance.status)
+    #     instance.save()
+    #     return instance
+    
+class Put_BarberPanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderServices
+        fields = ['status']
+
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status',instance.status)
+        instance.save()
+        return instance
 
 
 
