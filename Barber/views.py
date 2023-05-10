@@ -5,7 +5,6 @@ from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
 from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,CustomerBasketSerializer,BarberPanelSerializer
 from .filters import BarberRateFilter
@@ -32,6 +31,10 @@ class BarberPanelView(ModelViewSet):
     #queryset = OrderServices.objects.all()
     serializer_class = BarberPanelSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['status']
+    ordering_fields = ['date','price']
+    
 
     def get_queryset(self):
         barber = Barber.objects.get(user_id = self.request.user.id)
