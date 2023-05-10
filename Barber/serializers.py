@@ -121,6 +121,11 @@ class RateSerializer(serializers.ModelSerializer):
         fields = ['barbershop','stars']
 
 
+# class BarberPanelSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = 
+
+
 
 
     

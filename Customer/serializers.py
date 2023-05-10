@@ -66,3 +66,4 @@ class CustomerWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['first_name','last_name','profile_pic','credit']
+

@@ -77,6 +77,7 @@ class OrderServices(models.Model):
     ('BarberCancelled','BarberCancelled'),
     ('CustomerCancelled','CustomerCancelled'),
     ('CustomerNotCome','CustomerNotCome'),
+    ('Done','Done'),
   )
   
   service = models.ForeignKey(CategoryService,on_delete=models.CASCADE,related_name='services')

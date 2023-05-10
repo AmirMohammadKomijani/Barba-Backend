@@ -28,6 +28,9 @@ from Customer.models import Customer
 #         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
 
 
+
+
+
 class CustomerBasketView(ModelViewSet):
     #queryset = OrderServices.objects.all()
     serializer_class = CustomerBasketSerializer
