@@ -73,11 +73,15 @@ class CustomerBasketView(ModelViewSet):
 
 
 class addCategoryView(ModelViewSet):
-    queryset = Category.objects.all()
+    # queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     def get_serializer_context(self):
         return {'barber_id':self.request.user.id}
+
+    def get_queryset(self):
+        barber = Barber.objects.get(id = self.request.user.id)
+        return Category.objects.filter(barber_id = barber)
 
 
 class addCategoryServiceView(ModelViewSet):

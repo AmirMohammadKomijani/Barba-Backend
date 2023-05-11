@@ -68,6 +68,8 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id','category','categoryServices']
     
     def create(self, validated_data):
+        barber = Barber.objects.get(id = self.context['barber_id'])
+        validated_data['barber'] = barber
         return Category.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
