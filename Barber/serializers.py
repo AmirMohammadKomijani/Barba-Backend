@@ -41,11 +41,24 @@ class CategoryServiceSerializer(serializers.ModelSerializer):
         model = CategoryService
         fields = ['id','service','price','servicePic']
     
-    def save(self, **kwargs):
-        (category,created) = Category.objects.get_or_create(id = self.context['category_id'])
-        self.validated_data.update({'category':category,**kwargs})
-        service = CategoryService.objects.create(**self.validated_data)
-        return service
+    # def save(self, **kwargs):
+    #     (category,created) = Category.objects.get_or_create(id = self.context['category_id'])
+    #     self.validated_data.update({'category':category,**kwargs})
+    #     service = CategoryService.objects.create(**self.validated_data)
+    #     return service
+
+    def create(self, validated_data):
+        category = Category.objects.get(id = self.context['category_id'])
+        validated_data['category'] = category
+        return CategoryService.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.service = validated_data.get('service',instance.service)
+        instance.price = validated_data.get('price',instance.price)
+        instance.servicePic = validated_data.get('servicePic',instance.servicePic)
+        instance.save()
+        return instance
+
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -54,16 +67,19 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id','category','categoryServices']
     
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)
+    
     def update(self, instance, validated_data):
         instance.category = validated_data.get('category',instance.category)
         instance.save()
         return instance
     
-    def save(self, **kwargs):
-        (barber,created) = Barber.objects.get_or_create(id=self.context['barber_id'])
-        self.validated_data.update({'barber':barber,**kwargs})
-        catg = Category.objects.create(**self.validated_data)
-        return catg
+    # def save(self, **kwargs):
+    #     (barber,created) = Barber.objects.get_or_create(id=self.context['barber_id'])
+    #     self.validated_data.update({'barber':barber,**kwargs})
+    #     catg = Category.objects.create(**self.validated_data)
+    #     return catg
 
 class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
@@ -149,13 +165,6 @@ class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
         fields = ['id','full_name','profile_pic']
 
 
-
-
-
-
-
-
-
 class Get_BarberPanelSerializer(serializers.ModelSerializer):
     service = ServiceBarberPanelSerializer()
     customer = CustomerInfoBarberPanelSerializer()
@@ -177,6 +186,18 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         instance.status = validated_data.get('status',instance.status)
         instance.save()
         return instance
+
+
+# class CustomerBuyWalletSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = ['credit']
+    
+#     def update(self, instance, validated_data):
+#         instance.credit = validated_data.get('credit',instance.credit)
+#         instance.save()
+#         return instance
+
 
 
 

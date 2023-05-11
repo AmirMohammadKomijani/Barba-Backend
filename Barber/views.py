@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet,ViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter,OrderingFilter
@@ -26,6 +27,15 @@ import datetime
 
 #     def get_serializer_context(self):
 #         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
+
+
+# class CustomerBuyWalletView(ModelViewSet):
+#     # queryset = Customer.objects.all()
+#     serializer_class = CustomerBuyWalletSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Customer.objects.filter(user_id = self.request.user.id)
 
 
 class BarberPanelView(ModelViewSet):
