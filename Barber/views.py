@@ -45,7 +45,7 @@ class BarberPanelView(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['status','date']
     # filterset_class = BarberPanelPriceFilter
-    ordering_fields = ['date']
+    ordering_fields = ['date','time']
 
     def get_serializer_class(self):
         if self.request.method == "PUT":

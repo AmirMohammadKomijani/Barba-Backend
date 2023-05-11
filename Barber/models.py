@@ -88,6 +88,7 @@ class OrderServices(models.Model):
   
   class Meta:
       unique_together = ('barber', 'time','date')
+      ordering = ['date','time']
 
 
 
