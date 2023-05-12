@@ -164,7 +164,7 @@ class ServiceBarberPanelSerializer(serializers.ModelSerializer):
 class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id','full_name','profile_pic']
+        fields = ['id','first_name','last_name','profile_pic']
 
 
 class Get_BarberPanelSerializer(serializers.ModelSerializer):
