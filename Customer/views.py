@@ -30,7 +30,7 @@ class CustomerProfileView(ModelViewSet):
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated],url_path="add_credits", url_name="add_credits")
     def add_credits(self, request):
-            customer= Customer.objects.get(user_id=request.user.id)
+            (customer,created)= Customer.objects.get_or_create(user_id=request.user.id)
             if request.method == 'PUT':
                 added_credit = Decimal(request.data['credit'])
                 if added_credit < 0:

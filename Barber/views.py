@@ -54,7 +54,7 @@ class BarberPanelView(ModelViewSet):
     
 
     def get_queryset(self):
-        barber = Barber.objects.get(user_id = self.request.user.id)
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return OrderServices.objects.filter(barber_id = barber)#.filter(date = datetime.date.today())
 
 
@@ -80,7 +80,7 @@ class addCategoryView(ModelViewSet):
         return {'barber_id':self.request.user.id}
 
     def get_queryset(self):
-        barber = Barber.objects.get(id = self.request.user.id)
+        (barber,created) = Barber.objects.get_or_create(id = self.request.user.id)
         return Category.objects.filter(barber_id = barber)
 
 
