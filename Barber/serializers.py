@@ -86,9 +86,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
     barber = BasketBarberInfoSerializer()
+    originalPrice = serializers.SerializerMethodField(method_name='original_price')
     class Meta():
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quantity']
+        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice']
+
+    def original_price(self,obj):
+        return obj.service.price
     
     def update(self, instance, validated_data):
         instance.status = validated_data.get('status',instance.status)
