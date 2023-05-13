@@ -17,7 +17,7 @@ class OrderServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status']
+        fields = ['id','service','barber', 'time','date','status','quatnity']
 
     
     # def validate_time(self, barber_id):
@@ -88,7 +88,7 @@ class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     barber = BasketBarberInfoSerializer()
     class Meta():
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status']
+        fields = ['id','service','barber', 'time','date','status','quantity']
     
     def update(self, instance, validated_data):
         instance.status = validated_data.get('status',instance.status)
@@ -98,10 +98,11 @@ class Get_CustomerBasketSerializer(serializers.ModelSerializer):
 class Put_CustomerBasketSerializer(serializers.ModelSerializer):
     class Meta():
         model = OrderServices
-        fields = ['status']
+        fields = ['status','quantity']
     
     def update(self, instance, validated_data):
         instance.status = validated_data.get('status',instance.status)
+        instance.quantity = validated_data.get('quantity',instance.quantity)
         instance.save()
         return instance
 
@@ -172,7 +173,7 @@ class Get_BarberPanelSerializer(serializers.ModelSerializer):
     customer = CustomerInfoBarberPanelSerializer()
     class Meta:
         model = OrderServices
-        fields = ['id','service','customer','date','time','status']
+        fields = ['id','service','customer','date','time','status','quantity']
 
     # def update(self, instance, validated_data):
     #     instance.status = validated_data.get('status',instance.status)
