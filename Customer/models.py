@@ -10,7 +10,7 @@ class Customer(models.Model):
     area = models.CharField(max_length=255,null=True)
     phone_Number = models.CharField(max_length=11,unique=True,null=True)
     profile_pic = models.ImageField(upload_to='customer/profile',null=False,default='default_profile.png')
-    credit = models.DecimalField( max_digits=5, decimal_places=2, default=0.00, blank=True)
+    credit = models.FloatField(default=0.00)
     user = models.OneToOneField(
         User, on_delete=models.CASCADE)
     

@@ -32,7 +32,7 @@ class CustomerProfileView(ModelViewSet):
     def add_credits(self, request):
             (customer,created)= Customer.objects.get_or_create(user_id=request.user.id)
             if request.method == 'PUT':
-                added_credit = Decimal(request.data['credit'])
+                added_credit = float(request.data['credit'])
                 if added_credit < 0:
                     return Response({"error": "Credit cannot be negative"})        
                 # Transaction.objects.create(customer=customer, transaction_type='C', amount=added_credit)
