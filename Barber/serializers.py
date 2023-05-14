@@ -17,7 +17,7 @@ class OrderServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quatnity']
+        fields = ['id','service','barber', 'time','date','status','quantity']
 
     
     # def validate_time(self, barber_id):
@@ -177,11 +177,19 @@ class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
 
 
 class Get_BarberPanelSerializer(serializers.ModelSerializer):
-    service = ServiceBarberPanelSerializer()
-    customer = CustomerInfoBarberPanelSerializer()
-    class Meta:
+    service = CategoryServiceSerializer()
+    barber = BasketBarberInfoSerializer()
+    originalPrice = serializers.SerializerMethodField(method_name='original_price')
+    totalCost = serializers.SerializerMethodField(method_name='total')
+    class Meta():
         model = OrderServices
-        fields = ['id','service','customer','date','time','status','quantity']
+        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice','totalCost']
+
+    def original_price(self,obj):
+        return obj.service.price
+    
+    def total(self,obj):
+        return obj.service.price * obj.quantity
 
     # def update(self, instance, validated_data):
     #     instance.status = validated_data.get('status',instance.status)
