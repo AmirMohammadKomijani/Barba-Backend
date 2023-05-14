@@ -6,8 +6,8 @@ from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Barber,Rate,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
+from .models import Barber,Rate,OrderServices,Category,CategoryService,TotalPrice
+from .serializers import BarberSerializer,BarberProfileSerializer,TotalPriceSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
 from .filters import BarberRateFilter,BarberPanelPriceFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -37,6 +37,13 @@ import datetime
 #     def get_queryset(self):
 #         return Customer.objects.filter(user_id = self.request.user.id)
 
+
+class TotalPriceView(ModelViewSet):
+    serializer_class = TotalPriceSerializer
+
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        return TotalPrice.objects.filter(customer_id = customer)
 
 class BarberPanelView(ModelViewSet):
     #queryset = OrderServices.objects.all()
@@ -71,6 +78,13 @@ class CustomerBasketView(ModelViewSet):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
         return OrderServices.objects.filter(customer_id = customer)
 
+# class CustomerBasketTotalPriceView(ModelViewSet):
+#     # queryset = OrderServices.objects.all()
+#     serializer_class = CustomerBasketTotalPriceSerializer
+
+#     def get_queryset(self):
+#         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+#         return OrderServices.objects.filter(customer_id = customer) 
 
 class addCategoryView(ModelViewSet):
     # queryset = Category.objects.all()

@@ -1,10 +1,21 @@
 from rest_framework import serializers
-from .models import Barber,Rate,OrderServices,CategoryService,Category
+from .models import Barber,Rate,OrderServices,CategoryService,Category,TotalPrice
 from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
 
 
+
+class TotalPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TotalPrice
+        fields = ['total']
+    
+    
+    def create(self, validated_data):
+        # category = Category.objects.get(id = self.context['category_id'])
+        # validated_data['category'] = category
+        return TotalPrice.objects.create(**validated_data)
 
 class BasketBarberInfoSerializer(serializers.ModelSerializer):
     class Meta():
@@ -87,16 +98,16 @@ class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
     barber = BasketBarberInfoSerializer()
     originalPrice = serializers.SerializerMethodField(method_name='original_price')
-    totalCost = serializers.SerializerMethodField(method_name='total')
+    # totalCost = serializers.SerializerMethodField(method_name='total')
     class Meta():
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice','totalCost']
+        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice']
 
     def original_price(self,obj):
         return obj.service.price
     
-    def total(self,obj):
-        return obj.service.price * obj.quantity
+    # def total(self,obj):
+    #     return obj.service.price * obj.quantity
     
     def update(self, instance, validated_data):
         instance.status = validated_data.get('status',instance.status)
@@ -104,7 +115,7 @@ class Get_CustomerBasketSerializer(serializers.ModelSerializer):
         return instance
     
 class Put_CustomerBasketSerializer(serializers.ModelSerializer):
-    class Meta():
+    class Meta:
         model = OrderServices
         fields = ['status','quantity']
     
@@ -113,6 +124,11 @@ class Put_CustomerBasketSerializer(serializers.ModelSerializer):
         instance.quantity = validated_data.get('quantity',instance.quantity)
         instance.save()
         return instance
+
+# class CustomerBasketTotalPriceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OrderServices
+#         fields = ['totalPrice']
 
     
     
@@ -178,12 +194,12 @@ class CustomerInfoBarberPanelSerializer(serializers.ModelSerializer):
 
 class Get_BarberPanelSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
-    barber = BasketBarberInfoSerializer()
+    customer = CustomerInfoBarberPanelSerializer()
     originalPrice = serializers.SerializerMethodField(method_name='original_price')
     totalCost = serializers.SerializerMethodField(method_name='total')
     class Meta():
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice','totalCost']
+        fields = ['id','service','customer', 'time','date','status','quantity','originalPrice','totalCost']
 
     def original_price(self,obj):
         return obj.service.price

@@ -86,10 +86,16 @@ class OrderServices(models.Model):
   date = models.DateField(default=datetime.date.today)
   status = models.CharField(max_length=20,choices=order_status,default='ordering')
   quantity = models.IntegerField(default=1)
+  # totalPrice = models.FloatField(default=0)
   
   class Meta:
       unique_together = ('barber', 'time','date')
       ordering = ['date','time']
+
+class TotalPrice(models.Model):
+  total = models.FloatField(default=0)
+  customer = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='customerTotal',null=True)
+
 
 
 
