@@ -28,7 +28,7 @@ class OrderServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quantity']
+        fields = ['id','service','barber', 'time','date','status']
 
     
     # def validate_time(self, barber_id):
@@ -45,6 +45,18 @@ class OrderServiceSerializer(serializers.ModelSerializer):
         self.validated_data.update({'customer':customer,**kwargs})
         order = OrderServices.objects.create(**self.validated_data)
         return order
+
+    # def create(self, validated_data):
+    #     category = Category.objects.get(id = self.context['category_id'])
+    #     validated_data['category'] = category
+    #     return CategoryService.objects.create(**validated_data)
+    
+    # def update(self, instance, validated_data):
+    #     instance.service = validated_data.get('service',instance.service)
+    #     instance.price = validated_data.get('price',instance.price)
+    #     instance.servicePic = validated_data.get('servicePic',instance.servicePic)
+    #     instance.save()
+    #     return instance
 
 
 class CategoryServiceSerializer(serializers.ModelSerializer):
@@ -208,7 +220,7 @@ class Get_BarberPanelSerializer(serializers.ModelSerializer):
     customer = CustomerInfoBarberPanelSerializer()
     originalPrice = serializers.SerializerMethodField(method_name='original_price')
     totalCost = serializers.SerializerMethodField(method_name='total')
-    class Meta():
+    class Meta:
         model = OrderServices
         fields = ['id','service','customer', 'time','date','status','quantity','originalPrice','totalCost']
 
