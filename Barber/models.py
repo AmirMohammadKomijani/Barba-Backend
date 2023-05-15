@@ -32,7 +32,7 @@ class Barber(models.Model):
         User, on_delete=models.CASCADE,related_name='users',null=False)
   BarberShop = models.CharField(max_length=255,unique=True,null=False)
   Owner = models.CharField(max_length=255,null=False)
-  Parvaneh = models.CharField(max_length=10,unique=True,null=False)
+  Parvaneh = models.CharField(max_length=10,unique=True,null=True)
   phone_Number = models.CharField(max_length=11,unique = True,null=True)
   # email = models.EmailField(unique=True)
   area = models.CharField(max_length=255,null=False,choices=area_chices)

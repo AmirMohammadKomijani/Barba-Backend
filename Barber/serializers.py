@@ -79,7 +79,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id','category','categoryServices']
     
     def create(self, validated_data):
-        barber = Barber.objects.get(id = self.context['barber_id'])
+        barber = Barber.objects.get(user_id = self.context['barber_id'])
         validated_data['barber'] = barber
         return Category.objects.create(**validated_data)
     
@@ -98,16 +98,16 @@ class Get_CustomerBasketSerializer(serializers.ModelSerializer):
     service = CategoryServiceSerializer()
     barber = BasketBarberInfoSerializer()
     originalPrice = serializers.SerializerMethodField(method_name='original_price')
-    # totalCost = serializers.SerializerMethodField(method_name='total')
+    totalCost = serializers.SerializerMethodField(method_name='total')
     class Meta():
         model = OrderServices
-        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice']
+        fields = ['id','service','barber', 'time','date','status','quantity','originalPrice','totalCost']
 
     def original_price(self,obj):
         return obj.service.price
     
-    # def total(self,obj):
-    #     return obj.service.price * obj.quantity
+    def total(self,obj):
+        return obj.service.price * obj.quantity
     
     def update(self, instance, validated_data):
         instance.status = validated_data.get('status',instance.status)
@@ -165,6 +165,17 @@ class BarberProfileSerializer(serializers.ModelSerializer):
         user_serializer.save()
 
         return instance
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['background'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['background']
+        representation['logo'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['logo']
+        # representation['first_name'] = representation['first_name']
+        # representation['last_name'] = representation['last_name']
+        # representation['phone_Number'] = representation['phone_Number']
+        # representation['area'] = representation['area']
+        # representation['user'] = representation['user']
+        return representation
 
 
 class BarberAreasSerializer(serializers.ModelSerializer):

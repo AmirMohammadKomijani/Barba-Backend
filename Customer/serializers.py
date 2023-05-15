@@ -31,13 +31,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Customer
-        fields = ['first_name','last_name','phone_Number','area','profile_pic','user']
-
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['profile_pic'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['profile_pic']
-        return representation
+        fields = ['first_name','last_name','phone_Number','area','profile_pic','user',]
     
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name',instance.first_name)
@@ -55,6 +49,16 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['profile_pic'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['profile_pic']
+        # representation['first_name'] = representation['first_name']
+        # representation['last_name'] = representation['last_name']
+        # representation['phone_Number'] = representation['phone_Number']
+        # representation['area'] = representation['area']
+        # representation['user'] = representation['user']
+        return representation
+
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,4 +70,18 @@ class CustomerWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['first_name','last_name','profile_pic','credit']
+    
+    def update(self, instance, validated_data):
+        instance.credit = validated_data.get('credit',instance.credit)
+        instance.save()
+        return instance
+
+# class PutCustomerWalletSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = ['credit']
+#     def update(self, instance, validated_data):
+#         instance.credit = validated_data.get('credit',instance.credit)
+#         instance.save()
+#         return instance
 

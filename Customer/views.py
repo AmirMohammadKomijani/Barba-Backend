@@ -12,7 +12,7 @@ from decimal import Decimal
 
 class CustomerProfileView(ModelViewSet):
     queryset = Customer.objects.all()
-    serializer_class = CustomerWalletSerializer
+    serializer_class = CustomerProfileSerializer
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
@@ -28,16 +28,40 @@ class CustomerProfileView(ModelViewSet):
             serializer.save()
             return Response(serializer.data)
 
+    # @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated],url_path="add_credits", url_name="add_credits")
+    # def add_credits(self, request):
+    #         (customer,created)= Customer.objects.get_or_create(user_id=request.user.id)
+    #         if request.method == 'PUT':
+    #             added_credit = float(request.data['credit'])
+    #             if added_credit < 0:
+    #                 return Response({"error": "Credit cannot be negative"})        
+    #             # Transaction.objects.create(customer=customer, transaction_type='C', amount=added_credit)
+    #             customer.credit += added_credit
+    #             customer.save()
+    #         serializer = CustomerWalletSerializer(customer)
+    #         return Response(serializer.data)
+
+
+class WalletView(ModelViewSet):
+    serializer_class = CustomerWalletSerializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id = self.request.user.id)
+        return Customer.objects.filter(id = customer)
+
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated],url_path="add_credits", url_name="add_credits")
     def add_credits(self, request):
             (customer,created)= Customer.objects.get_or_create(user_id=request.user.id)
             if request.method == 'PUT':
                 added_credit = float(request.data['credit'])
-                if added_credit < 0:
-                    return Response({"error": "Credit cannot be negative"})        
+                # if added_credit < 0:
+                #     return Response({"error": "Credit cannot be negative"})        
                 # Transaction.objects.create(customer=customer, transaction_type='C', amount=added_credit)
                 customer.credit += added_credit
                 customer.save()
             serializer = CustomerWalletSerializer(customer)
             return Response(serializer.data)
+    
 

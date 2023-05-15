@@ -94,7 +94,7 @@ class addCategoryView(ModelViewSet):
         return {'barber_id':self.request.user.id}
 
     def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(id = self.request.user.id)
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return Category.objects.filter(barber_id = barber)
 
 
