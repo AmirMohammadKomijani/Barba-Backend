@@ -6,7 +6,7 @@ from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Barber,Rate,OrderServices,Category,CategoryService,TotalPrice
+from .models import Barber,Rate,OrderServices,Category,CategoryService
 from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
 from .filters import BarberRateFilter,BarberPanelPriceFilter
 from rest_framework.permissions import IsAuthenticated
