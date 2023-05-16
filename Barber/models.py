@@ -30,7 +30,7 @@ class Barber(models.Model):
 
   user = models.ForeignKey(
         User, on_delete=models.CASCADE,related_name='users',null=False)
-  BarberShop = models.CharField(max_length=255,unique=True,null=False)
+  BarberShop = models.CharField(max_length=255,unique=False,null=False)
   Owner = models.CharField(max_length=255,null=False)
   Parvaneh = models.CharField(max_length=10,unique=True,null=True)
   phone_Number = models.CharField(max_length=11,unique = True,null=True)
