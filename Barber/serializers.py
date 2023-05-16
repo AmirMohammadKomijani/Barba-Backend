@@ -1,21 +1,21 @@
 from rest_framework import serializers
-from .models import Barber,Rate,OrderServices,CategoryService,Category,TotalPrice
+from .models import Barber,Rate,OrderServices,CategoryService,Category
 from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
 
 
 
-class TotalPriceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TotalPrice
-        fields = ['total']
+# class TotalPriceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = TotalPrice
+#         fields = ['total']
     
     
-    def create(self, validated_data):
-        # category = Category.objects.get(id = self.context['category_id'])
-        # validated_data['category'] = category
-        return TotalPrice.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     # category = Category.objects.get(id = self.context['category_id'])
+    #     # validated_data['category'] = category
+    #     return TotalPrice.objects.create(**validated_data)
 
 class BasketBarberInfoSerializer(serializers.ModelSerializer):
     class Meta():

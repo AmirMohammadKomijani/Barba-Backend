@@ -92,9 +92,9 @@ class OrderServices(models.Model):
       unique_together = ('barber', 'time','date')
       ordering = ['date','time']
 
-class TotalPrice(models.Model):
-  total = models.FloatField(default=0)
-  customer = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='customerTotal',null=True)
+# class TotalPrice(models.Model):
+#   total = models.FloatField(default=0)
+#   customer = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='customerTotal',null=True)
 
 
 
