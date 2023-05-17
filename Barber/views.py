@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Barber,Rate,OrderServices,Category,CategoryService
 from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
-from .filters import BarberRateFilter,BarberPanelPriceFilter
+from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from Auth.models import User
@@ -50,8 +50,8 @@ class BarberPanelView(ModelViewSet):
     # serializer_class = Get_BarberPanelSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['status','date']
-    # filterset_class = BarberPanelPriceFilter
+    # filterset_fields = ['status','date']
+    filterset_class = BarberPanelFilter
     ordering_fields = ['date','time']
 
     def get_serializer_class(self):
