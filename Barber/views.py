@@ -70,6 +70,8 @@ class BarberDescriptionView(ModelViewSet):
     def get_queryset(self):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return BarberDescription.objects.filter(barber_id = barber)
+    def get_serializer_context(self):
+        return {'barber_id':self.request.user.id}
 
 class CustomerBasketView(ModelViewSet):
     #queryset = OrderServices.objects.all()

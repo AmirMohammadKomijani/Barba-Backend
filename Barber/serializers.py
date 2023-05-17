@@ -142,14 +142,30 @@ class Put_CustomerBasketSerializer(serializers.ModelSerializer):
 #         model = OrderServices
 #         fields = ['totalPrice']
 
-    
+class BarberDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarberDescription
+        fields = ['id','title','description','img']
+
+    def create(self, validated_data):
+        barber = Barber.objects.get(id = self.context['barber_id'])
+        validated_data['barber'] = barber
+        return BarberDescription.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title',instance.title)
+        instance.description = validated_data.get('description',instance.description)
+        instance.img = validated_data.get('img',instance.img)
+        instance.save()
+        return instance
     
 class BarberSerializer(serializers.ModelSerializer):
     # services = ServiceSerializer(many=True)
     categories = CategorySerializer(many=True)
+    barberDesc = BarberDescriptionSerializer(many=True)
     class Meta:
         model = Barber
-        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories']
+        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories','barberDesc']
 
 
 class BarberProfileSerializer(serializers.ModelSerializer):
@@ -246,22 +262,7 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         return instance
 
 
-class BarberDescriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BarberDescription
-        fields = ['title','description','img']
 
-    def create(self, validated_data):
-        barber = Barber.objects.get(id = self.context['barber_id'])
-        validated_data['barber'] = barber
-        return BarberDescription.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title',instance.title)
-        instance.description = validated_data.get('description',instance.description)
-        instance.img = validated_data.get('img',instance.img)
-        instance.save()
-        return instance
 
 
 
