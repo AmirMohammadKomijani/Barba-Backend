@@ -45,14 +45,14 @@ class Barber(models.Model):
 
 class Category(models.Model):
   
-  catg_choices = (
-    ('hair','hair'),
-    ('skin','skin'),
-    ('makeup','makeup'),
-    ('nail','nail'),
-  )
+  # catg_choices = (
+  #   ('hair','hair'),
+  #   ('skin','skin'),
+  #   ('makeup','makeup'),
+  #   ('nail','nail'),
+  # )
   
-  category = models.CharField(choices=catg_choices,max_length=20)
+  category = models.CharField(max_length=20)
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,null=True,related_name='categories')
 
 
