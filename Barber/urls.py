@@ -17,6 +17,7 @@ router.register('area',views.Areas,basename='show areas')
 router.register('order',views.OrderServiceView,basename='order')
 router.register('basket',views.CustomerBasketView,basename='Basket')
 router.register('panel',views.BarberPanelView,basename='Panel')
+router.register('description',views.BarberDescriptionView,basename='description')
 # router.register('paywallet',views.CustomerBuyWalletView,basename='Wallet-Pay')
 
 

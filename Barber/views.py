@@ -6,8 +6,8 @@ from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Barber,Rate,OrderServices,Category,CategoryService
-from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
+from .models import Barber,Rate,OrderServices,Category,CategoryService,BarberDescription
+from .serializers import BarberSerializer,BarberProfileSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -64,6 +64,12 @@ class BarberPanelView(ModelViewSet):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return OrderServices.objects.filter(barber_id = barber)#.filter(date = datetime.date.today())
 
+class BarberDescriptionView(ModelViewSet):
+    serializer_class = BarberDescriptionSerializer
+
+    def get_queryset(self):
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        return BarberDescription.objects.filter(barber_id = barber)
 
 class CustomerBasketView(ModelViewSet):
     #queryset = OrderServices.objects.all()

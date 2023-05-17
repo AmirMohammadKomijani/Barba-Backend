@@ -42,6 +42,13 @@ class Barber(models.Model):
   logo = models.ImageField(upload_to='Barber/Logo',null=False,default='default_profile.png')
 
 
+class BarberDescription(models.Model):
+  barber = models.ForeignKey(Barber,on_delete=models.CASCADE,related_name='barberDesc',null=True)
+  title = models.CharField(max_length=40)
+  description = models.TextField(max_length=256)
+  img = models.ImageField(upload_to='Barber/Description',null=False,default='default_profile.png')
+
+
 
 class Category(models.Model):
   

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Barber,Rate,OrderServices,CategoryService,Category
+from .models import Barber,Rate,OrderServices,CategoryService,Category,BarberDescription
 from Auth.serializer import UserSerializer
 from Customer.serializers import CustomerSerializer
 from Customer.models import Customer
@@ -244,6 +244,25 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         instance.status = validated_data.get('status',instance.status)
         instance.save()
         return instance
+
+
+class BarberDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarberDescription
+        fields = ['title','description','img']
+
+    def create(self, validated_data):
+        barber = Barber.objects.get(id = self.context['barber_id'])
+        validated_data['barber'] = barber
+        return BarberDescription.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title',instance.title)
+        instance.description = validated_data.get('description',instance.description)
+        instance.img = validated_data.get('img',instance.img)
+        instance.save()
+        return instance
+
 
 
 # class CustomerBuyWalletSerializer(serializers.ModelSerializer):
