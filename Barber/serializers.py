@@ -158,6 +158,16 @@ class BarberDescriptionSerializer(serializers.ModelSerializer):
         instance.img = validated_data.get('img',instance.img)
         instance.save()
         return instance
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['img'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['img']
+        # representation['first_name'] = representation['first_name']
+        # representation['last_name'] = representation['last_name']
+        # representation['phone_Number'] = representation['phone_Number']
+        # representation['area'] = representation['area']
+        # representation['user'] = representation['user']
+        return representation
     
 class BarberSerializer(serializers.ModelSerializer):
     # services = ServiceSerializer(many=True)
