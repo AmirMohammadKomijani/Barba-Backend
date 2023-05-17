@@ -52,13 +52,13 @@ class Category(models.Model):
   #   ('nail','nail'),
   # )
   
-  category = models.CharField(max_length=20)
+  category = models.CharField(max_length=20,null=False)
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,null=True,related_name='categories')
 
 
 class CategoryService(models.Model):
-  service = models.CharField(blank=True,max_length=255)
-  price = models.FloatField(default=0)
+  service = models.CharField(max_length=255,null=False)
+  price = models.FloatField(null=False)
   servicePic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
   category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='categoryServices')
 
