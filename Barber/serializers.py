@@ -137,15 +137,22 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         return instance
 
 
+
+
+
 ################################################################
 
 ### customer ordering and paying process
 ## 1/ Barber info
 
-    
+class BarberInfoDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarberDescription
+        fields = ['id','title','description','img'] 
+
 class BarberInfoSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)
-    barberDesc = BarberDescriptionSerializer(many=True)
+    barberDesc = BarberInfoDescriptionSerializer(many=True)
     class Meta:
         model = Barber
         fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories','barberDesc']
