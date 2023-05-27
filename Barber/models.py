@@ -3,6 +3,8 @@ from django.conf import settings
 from Auth.models import User
 from Customer.models import Customer
 import datetime
+from dateutil.relativedelta import relativedelta
+
 
 
 class Barber(models.Model):
@@ -34,6 +36,12 @@ class Barber(models.Model):
   rate = models.FloatField(default=1,null=False)
   background = models.ImageField(upload_to='Barber/backg',null=False,default='default_profile.png')
   logo = models.ImageField(upload_to='Barber/Logo',null=False,default='default_profile.png')
+  expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=1))
+
+  # def save(self, *args, **kwargs):
+  #     if not self.expire_date:
+  #         self.expire_date = User.date_joined + relativedelta(months=1)
+  #     super(Barber, self).save(*args, **kwargs)
 
 
 class BarberDescription(models.Model):

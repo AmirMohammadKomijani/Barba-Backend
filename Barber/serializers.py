@@ -137,6 +137,21 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class BarberPremiumSerializer(serializers.ModelSerializer):
+
+    # month = serializers.ChoiceField(choices=Months_choices)
+    class Meta:
+        model = Barber
+        fields = ['id','expire_date']
+    
+    def update(self, instance, validated_data):
+        instance.expire_date = validated_data.get('expire_date',instance.expire_date)
+        instance.save()
+        return instance
+    
+    
+
 # Comment Serializer; allow customer to post a comment
 class CommentSerializerOnPOST(serializers.ModelSerializer):
     # customer = CustomerWalletSerializer(read_only = True)

@@ -18,6 +18,7 @@ service_router.register('service', views.addCategoryServiceView, basename='servi
 router.register('profile',views.BarberProfileView,basename='profile')
 router.register('description',views.BarberDescriptionView,basename='description')
 router.register('panel',views.BarberPanelView,basename='Panel')
+router.register('premium',views.BarberPremiumView,basename='premium')
 
 
 

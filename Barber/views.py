@@ -11,7 +11,7 @@ from .models import Barber,OrderServices,Category,CategoryService,BarberDescript
 from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
                         CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
                         Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
-                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET
+                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,BarberPremiumSerializer
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from Customer.models import Customer
@@ -94,7 +94,10 @@ class BarberPanelView(ModelViewSet):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return OrderServices.objects.filter(barber_id = barber)
 
-
+class BarberPremiumView(ModelViewSet):
+    serializer_class = BarberPremiumSerializer
+    def get_queryset(self):
+        return Barber.objects.filter(user_id = self.request.user.id)
 
 
 #######################################################
