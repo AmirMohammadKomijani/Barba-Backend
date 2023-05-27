@@ -2,11 +2,16 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework import generics
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Barber,OrderServices,Category,CategoryService,BarberDescription
-from .serializers import BarberInfoSerializer,BarberProfileSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
+from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment
+from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
+                        CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
+                        Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
+                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from Customer.models import Customer
@@ -147,3 +152,44 @@ class Areas(ModelViewSet):
 
 
 
+# class CommentCreateView(CreateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+#     permission_classes = [IsAuthenticated,]
+
+#     def perform_create(self, serializer):
+#         serializer.save(customer=self.request.user.customer)
+# class CommentReplyView(UpdateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+#     permission_classes = [IsAuthenticated,]
+
+#     def perform_update(self, serializer):
+#         if self.request.useer.barber:
+#             serializer.save(barber=self.request.user.barber)
+#         return Response("google.com",status=404 )
+        
+class CommentCreateAPIView(CreateAPIView):#, generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializerOnPOST
+    queryset = Comment.objects.all()    
+    # def update(self, request, *args, **kwargs):
+    #     # serializer_class = 
+    #     return super().update(request, *args, **kwargs)
+class CommentReplyAPIView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializerOnPUT
+    queryset = Comment.objects.all()    
+    # def perform_create(self, serializer):
+    #     # if self.request.user.barber == comment.barber:
+    #     # if self.request.user.barber == self.context['request'].user.barber:
+    #         comment_id = self.kwargs.get('comment_id')
+    #         comment = get_object_or_404(Comment, id=comment_id)
+    #         serializer.save(barber=self.request.user.barber, comment=comment)
+        # serializer.save(comment=comment)
+class  CommentShowAPIView(generics.ListAPIView):
+    # queryset = Comment.objects.all()
+    serializer_class = CommentSerializerOnGET
+    def get_queryset(self):
+        barber_id = self.kwargs['barber_id']
+        return Comment.objects.filter(barber_id=barber_id)

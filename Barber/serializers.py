@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Barber,OrderServices,CategoryService,Category,BarberDescription
+from .models import Barber,OrderServices,CategoryService,Category,BarberDescription, Comment
 from Auth.serializer import UserSerializer
+from Customer.serializers import  CustomerWalletSerializer
 from Customer.models import Customer
 
 
@@ -136,26 +137,52 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+# Comment Serializer; allow customer to post a comment
+class CommentSerializerOnPOST(serializers.ModelSerializer):
+    # customer = CustomerWalletSerializer(read_only = True)
+    # customer = serializers.SerializerMethodField()
+    # replies = serializers.SerializerMethodField()
+    class Meta:
+        model = Comment
+        fields = ("id", "barber", "customer", "body", "created_at",)
+        # read_only_fields = ("id", "created_at","customer" )
+        # exclude = ("created_at")
+    # def get_replies(self, obj):
+    #     replies = obj.replies.all()
+    #     serializer = self.__class__(replies, many=True, context=self.context)
+    #     return serializer.data        
 
-
-
-
+    # def create(self, validated_data):
+    #     validated_data['customer'] = self.context['request'].user.customer
+    #     return super().create(validated_data)
+    # def get_customer(self, obj):
+    #     customer = obj.customer
+    #     serializer = CustomerWalletSerializer(customer, many=False, context=self.context)
+    #     return serializer.data
+class CommentSerializerOnGET(serializers.ModelSerializer):
+    customer = CustomerWalletSerializer(read_only = True)
+    class Meta:
+        model = Comment
+        fields = "__all__"
+        read_only_fields = ("id", "created_at",)
+class CommentSerializerOnPUT(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id',"body", 'reply', 'created_at')
+        read_only_fields = ('id', 'created_at',"body")
 ################################################################
 
 ### customer ordering and paying process
 ## 1/ Barber info
 
-class BarberInfoDescriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BarberDescription
-        fields = ['id','title','description','img'] 
-
+    
 class BarberInfoSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)
-    barberDesc = BarberInfoDescriptionSerializer(many=True)
+    barberDesc = BarberDescriptionSerializer(many=True)
+    comments = CommentSerializerOnGET(many=True,) 
     class Meta:
         model = Barber
-        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories','barberDesc']
+        fields = ['id','BarberShop','Owner','phone_Number','area','address','rate','background','logo','categories','barberDesc', "comments"]
 
 
 ## 2/ Ordering a service
@@ -229,7 +256,7 @@ class BarberAreasSerializer(serializers.ModelSerializer):
 
 
 
-    
 
+    
 
 
