@@ -16,6 +16,7 @@ django-mysql = "*"
 drf-nested-routers = "*"
 djoser = "*"
 drf-writable-nested = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
