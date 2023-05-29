@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment
+from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment , BarberPremium
 from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
                         CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
                         Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
@@ -97,7 +97,7 @@ class BarberPanelView(ModelViewSet):
 class BarberPremiumView(ModelViewSet):
     serializer_class = BarberPremiumSerializer
     def get_queryset(self):
-        return Barber.objects.filter(user_id = self.request.user.id)
+        return BarberPremium.objects.filter(barber_id = self.request.user.id)
 
 
 #######################################################

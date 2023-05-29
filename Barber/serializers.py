@@ -1,8 +1,12 @@
 from rest_framework import serializers
-from .models import Barber,OrderServices,CategoryService,Category,BarberDescription, Comment
+from .models import Barber,OrderServices,CategoryService,Category,BarberDescription, Comment,BarberPremium
 from Auth.serializer import UserSerializer
 from Customer.serializers import  CustomerWalletSerializer
 from Customer.models import Customer
+from dateutil.relativedelta import relativedelta
+import datetime
+from rest_framework.response import Response
+
 
 
 
@@ -142,13 +146,17 @@ class BarberPremiumSerializer(serializers.ModelSerializer):
 
     # month = serializers.ChoiceField(choices=Months_choices)
     class Meta:
-        model = Barber
-        fields = ['id','expire_date']
+        model = BarberPremium
+        fields = ['id','expire_date','month']
     
     def update(self, instance, validated_data):
-        instance.expire_date = validated_data.get('expire_date',instance.expire_date)
-        instance.save()
+        # instance.expire_date = validated_data.get('expire_date',instance.expire_date)
+        if instance.expire_date < datetime.date.today():
+            instance.month = validated_data.get('month',instance.month)
+            instance.expire_date += relativedelta(months=instance.month)
+            instance.save()
         return instance
+    
     
     
 
@@ -190,10 +198,14 @@ class CommentSerializerOnPUT(serializers.ModelSerializer):
 ### customer ordering and paying process
 ## 1/ Barber info
 
+class BarberInfoDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BarberDescription
+        fields = ['id','title','description','img']
     
 class BarberInfoSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)
-    barberDesc = BarberDescriptionSerializer(many=True)
+    barberDesc = BarberInfoDescriptionSerializer(many=True)
     comments = CommentSerializerOnGET(many=True,) 
     class Meta:
         model = Barber

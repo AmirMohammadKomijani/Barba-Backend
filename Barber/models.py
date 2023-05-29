@@ -36,7 +36,7 @@ class Barber(models.Model):
   rate = models.FloatField(default=1,null=False)
   background = models.ImageField(upload_to='Barber/backg',null=False,default='default_profile.png')
   logo = models.ImageField(upload_to='Barber/Logo',null=False,default='default_profile.png')
-  expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=1))
+  # expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=1))
 
   # def save(self, *args, **kwargs):
   #     if not self.expire_date:
@@ -49,6 +49,21 @@ class BarberDescription(models.Model):
   title = models.CharField(max_length=40)
   description = models.TextField(max_length=256)
   img = models.ImageField(upload_to='Barber/Description',null=False,default='default_profile.png')
+
+
+class BarberPremium(models.Model):
+    
+  during_choices = (
+    (1,'1-month'),
+    (3,'3-month'),
+    (6,'6-month'),
+    (12,'12-month'),
+  )
+  
+  
+  barber = models.ForeignKey(Barber,on_delete=models.CASCADE,default=1)
+  expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=1))
+  month = models.IntegerField(choices=during_choices,default=0)
 
 
 class Category(models.Model):
