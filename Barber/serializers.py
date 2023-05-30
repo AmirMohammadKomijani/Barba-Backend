@@ -268,8 +268,6 @@ class Put_CustomerBasketSerializer(serializers.ModelSerializer):
         return instance
 
 
-
-
 ###############################################################
 ### extra information    
 

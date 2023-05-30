@@ -15,6 +15,8 @@ from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAre
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from Customer.models import Customer
+import datetime
+
 
 
 
@@ -137,7 +139,18 @@ class CustomerBasketView(ModelViewSet):
         return Get_CustomerBasketSerializer
     def get_queryset(self):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        history = OrderServices.objects.filter(customer_id = customer)
+        return OrderServices.objects.filter(date__gt =  datetime.date.today())
+
+
+class CustomerOrderHistoryView(ModelViewSet):
+    serializer_class = Get_CustomerBasketSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
         return OrderServices.objects.filter(customer_id = customer)
+
 
 
 
