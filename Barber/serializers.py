@@ -57,7 +57,7 @@ class BarberDescriptionSerializer(serializers.ModelSerializer):
         fields = ['id','title','description','img']
 
     def create(self, validated_data):
-        barber = Barber.objects.get_or_create(id = self.context['barber_id'])
+        (barber,created) = Barber.objects.get_or_create(user_id = self.context['barber_id'])
         validated_data['barber'] = barber
         return BarberDescription.objects.create(**validated_data)
 
@@ -155,7 +155,9 @@ class BarberPremiumSerializer(serializers.ModelSerializer):
             instance.month = validated_data.get('month',instance.month)
             instance.expire_date += relativedelta(months=instance.month)
             instance.save()
-        return instance
+            return instance
+        else:
+            return Response({"message":"wrong"})
     
     
     
