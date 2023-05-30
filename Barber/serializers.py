@@ -145,9 +145,13 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
 class BarberPremiumSerializer(serializers.ModelSerializer):
 
     # month = serializers.ChoiceField(choices=Months_choices)
+    days = serializers.SerializerMethodField(method_name="calc_days")
     class Meta:
         model = BarberPremium
-        fields = ['id','expire_date','month']
+        fields = ['id','expire_date','month','days']
+    
+    def calc_days(self,obj):
+        return (obj.expire_date - datetime.date.today()).days
     
     def update(self, instance, validated_data):
         # instance.expire_date = validated_data.get('expire_date',instance.expire_date)
@@ -160,8 +164,6 @@ class BarberPremiumSerializer(serializers.ModelSerializer):
             return Response({"message":"wrong"})
     
     
-    
-
 # Comment Serializer; allow customer to post a comment
 class CommentSerializerOnPOST(serializers.ModelSerializer):
     # customer = CustomerWalletSerializer(read_only = True)
@@ -275,14 +277,6 @@ class BarberAreasSerializer(serializers.ModelSerializer):
     class Meta():
         model = Barber
         fields = ['area']
-
-
-
-
-
-
-
-
 
     
 
