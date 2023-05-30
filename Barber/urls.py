@@ -27,7 +27,7 @@ nestedRouter.register('info',views.BarberInfoView,basename='info')
 router.register('area',views.Areas,basename='show areas')
 router.register('order',views.OrderServiceView,basename='order')
 router.register('basket',views.CustomerBasketView,basename='Basket')
-router.register('OrderHistory',views.CustomerOrderHistoryView,basename='OrderHistory')
+router.register('orderhistory',views.CustomerOrderHistoryView,basename='orderhistory')
 
 
 urlpatterns = \
