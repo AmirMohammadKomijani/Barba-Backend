@@ -142,22 +142,44 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         return instance
 
 
-class BarberPremiumSerializer(serializers.ModelSerializer):
+class GetBarberPremiumSerializer(serializers.ModelSerializer):
 
     # month = serializers.ChoiceField(choices=Months_choices)
+    days = serializers.SerializerMethodField(method_name='calc_days')
+    class Meta:
+        model = BarberPremium
+        fields = ['id','expire_date','month','days']
+    
+    def calc_days(self,obj):
+        days = (obj.expire_date - datetime.date.today()).days
+        if days >= 0:
+            return days
+        return 0
+ 
+
+
+class PutBarberPremiumSerializer(serializers.ModelSerializer):
+
+    # month = serializers.ChoiceField(choices=Months_choices)
+    # days = serializers.SerializerMethodField(method_name='calc_days')
     class Meta:
         model = BarberPremium
         fields = ['id','expire_date','month']
     
+    # def calc_days(self,obj):
+    #     return (obj.expire_date - datetime.date.today()).days
+    
     def update(self, instance, validated_data):
         # instance.expire_date = validated_data.get('expire_date',instance.expire_date)
-        if instance.expire_date < datetime.date.today():
+        if instance.expire_date <= datetime.date.today():
             instance.month = validated_data.get('month',instance.month)
             instance.expire_date += relativedelta(months=instance.month)
             instance.save()
             return instance
+        # elif instance.expire_date - datetime.date.today() < 0:
+        #     return Response({"message":"wrong"})
         else:
-            return Response({"message":"wrong"})
+            return 0
     
     
     

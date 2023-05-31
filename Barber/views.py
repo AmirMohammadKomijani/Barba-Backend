@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework import generics
 from rest_framework.filters import SearchFilter,OrderingFilter
@@ -11,7 +12,7 @@ from .models import Barber,OrderServices,Category,CategoryService,BarberDescript
 from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
                         CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
                         Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
-                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,BarberPremiumSerializer
+                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,GetBarberPremiumSerializer,PutBarberPremiumSerializer
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from Customer.models import Customer
@@ -96,10 +97,33 @@ class BarberPanelView(ModelViewSet):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return OrderServices.objects.filter(barber_id = barber)
 
-class BarberPremiumView(ModelViewSet):
-    serializer_class = BarberPremiumSerializer
+class BarberPremiumView(APIView):
+    def get(self,request):
+        (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+        queryset = BarberPremium.objects.filter(barber = barber)
+        serializer = GetBarberPremiumSerializer(queryset,many=True)
+        return Response(serializer.data)
+    
+    # def put(self,request,id):
+    #     (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+    #     queryset = BarberPremium.objects.filter(barber = barber)
+    #     serializer = PutBarberPremiumSerializer(queryset,data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     return Response(serializer.data)
+
+
+class BarberBuyPremiumView(ModelViewSet):
+    serializer_class = PutBarberPremiumSerializer
+
     def get_queryset(self):
-        return BarberPremium.objects.filter(barber_id = self.request.user.id)
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        return BarberPremium.objects.filter(barber=barber)
+
+
+
+
+
+    
 
 
 #######################################################

@@ -11,6 +11,8 @@ router = routers.SimpleRouter()
 
 #########################
 ### 1/ Barber panel urls
+
+
 nestedRouter.register('categories', views.addCategoryView, basename='categories')
 service_router = nested.NestedSimpleRouter(nestedRouter, 'categories', lookup='category')
 service_router.register('service', views.addCategoryServiceView, basename='services')
@@ -18,7 +20,7 @@ service_router.register('service', views.addCategoryServiceView, basename='servi
 router.register('profile',views.BarberProfileView,basename='profile')
 router.register('description',views.BarberDescriptionView,basename='description')
 router.register('panel',views.BarberPanelView,basename='Panel')
-router.register('premium',views.BarberPremiumView,basename='premium')
+router.register('buypremium',views.BarberBuyPremiumView,basename='buypremium')
 
 
 
@@ -35,5 +37,7 @@ urlpatterns = \
     path('comments/create/', views.CommentCreateAPIView.as_view(), name='comment-create'),
     path('comments/<int:pk>/reply/', views.CommentReplyAPIView.as_view(), name="comment-reply"),
     path('<int:barber_id>/show-comments/', views.CommentShowAPIView.as_view(), name="comment-show"),
+    path('premium/', views.BarberPremiumView.as_view(), name="premium"),
+    path('premium/<int:pk>/', views.BarberPremiumView.as_view(), name="premium"),
     ] + \
         router.urls + nestedRouter.urls + service_router.urls
