@@ -29,14 +29,14 @@ nestedRouter.register('info',views.BarberInfoView,basename='info')
 router.register('area',views.Areas,basename='show areas')
 router.register('order',views.OrderServiceView,basename='order')
 router.register('basket',views.CustomerBasketView,basename='Basket')
-router.register('orderhistory',views.CustomerOrderHistoryView,basename='orderhistory')
+router.register('OrderHistory',views.CustomerOrderHistoryView,basename='OrderHistory')
 
 
 urlpatterns = \
     [
     path('comments/create/', views.CommentCreateAPIView.as_view(), name='comment-create'),
     path('comments/<int:pk>/reply/', views.CommentReplyAPIView.as_view(), name="comment-reply"),
-    path('<int:barber_id>/show-comments/', views.CommentShowAPIView.as_view(), name="comment-show"),
+    path('show-comments/', views.CommentShowAPIView.as_view(), name="comment-show"),
     path('premium/', views.BarberPremiumView.as_view(), name="premium"),
     path('premium/<int:pk>/', views.BarberPremiumView.as_view(), name="premium"),
     ] + \

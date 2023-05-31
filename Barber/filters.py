@@ -20,3 +20,11 @@ class BarberPanelFilter(FilterSet):
     class Meta:
         model = OrderServices
         fields = ['status','date']
+
+
+class CustomerOrderHistoryFilter(FilterSet):
+    # date = DateFromToRangeFilter()
+    
+    class Meta:
+        model = OrderServices
+        fields = {'status':['exact'],'date':['exact']}

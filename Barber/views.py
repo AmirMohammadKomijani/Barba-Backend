@@ -104,6 +104,7 @@ class BarberPremiumView(APIView):
         serializer = GetBarberPremiumSerializer(queryset,many=True)
         return Response(serializer.data)
     
+
     # def put(self,request,id):
     #     (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
     #     queryset = BarberPremium.objects.filter(barber = barber)
@@ -170,14 +171,14 @@ class CustomerBasketView(ModelViewSet):
 class CustomerOrderHistoryView(ModelViewSet):
     serializer_class = Get_CustomerBasketSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['date','status']
+    # filterset_class = CustomerOrderHistoryFilter
+    ordering_fields = ['date','time']
     
     def get_queryset(self):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
         return OrderServices.objects.filter(customer_id = customer)
-
-
-
-
 
 
 ###############################################################
@@ -231,5 +232,5 @@ class  CommentShowAPIView(generics.ListAPIView):
     # queryset = Comment.objects.all()
     serializer_class = CommentSerializerOnGET
     def get_queryset(self):
-        barber_id = self.kwargs['barber_id']
+        (barber_id,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return Comment.objects.filter(barber_id=barber_id)
