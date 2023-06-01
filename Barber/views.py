@@ -4,15 +4,16 @@ from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, UpdateAPIView
-from rest_framework import generics
+from rest_framework import generics , status
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment , BarberPremium
+from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment , BarberPremium, Rating
 from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
                         CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
                         Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
-                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,GetBarberPremiumSerializer,PutBarberPremiumSerializer
+                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,GetBarberPremiumSerializer,PutBarberPremiumSerializer,\
+                        RatingSerializer
 from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
 from Customer.models import Customer
@@ -119,13 +120,7 @@ class BarberBuyPremiumView(ModelViewSet):
     def get_queryset(self):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
         return BarberPremium.objects.filter(barber=barber)
-
-
-
-
-
-    
-
+ 
 
 #######################################################
 ### customer ordering and paying process
@@ -138,6 +133,33 @@ class BarberInfoView(ModelViewSet):
     filterset_class = BarberRateFilter
     search_fields = ['BarberShop']
     ordering_fields = ['rate']
+    @action(methods=["POST"], permission_classes=[IsAuthenticated], detail=True)
+    def rate(self, request,pk=None, *args, **kwargs):
+        # Get all ratings for the specified barber and customer
+        customer = request.user.customer
+        barber = get_object_or_404(Barber, pk=pk)
+        ratings = Rating.objects.filter(barber=barber, customer=customer)
+        if ratings.exists():
+            # If there are multiple ratings, delete all but the most recent one
+            if ratings.count() > 1:
+                old_ratings = ratings.order_by('-created_at')[:len(ratings)-1]
+                # old_ratings.delete()
+                for old_rating in old_ratings:
+                    old_rating.delete()
+            # Update the most recent rating with the new rating value
+            rating =ratings.order_by('-created_at').first()
+            serializer =RatingSerializer(rating, data=request.data)
+        else :
+                # If there are no ratings, create a new rating            
+                serializer = RatingSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(customer=customer, barber=barber)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Save the updated rating
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+        
 
 
 ## 2/ Ordering a service
@@ -214,6 +236,9 @@ class CommentCreateAPIView(CreateAPIView):#, generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CommentSerializerOnPOST
     queryset = Comment.objects.all()    
+    
+    def get_serializer_context(self):
+        return {"customer_id":self.request.user.id}
     # def update(self, request, *args, **kwargs):
     #     # serializer_class = 
     #     return super().update(request, *args, **kwargs)

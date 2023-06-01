@@ -4,7 +4,7 @@ from Auth.models import User
 from Customer.models import Customer
 import datetime
 from dateutil.relativedelta import relativedelta
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Barber(models.Model):
@@ -135,7 +135,14 @@ class Comment(models.Model):
 
 
 
-
-
-
-
+class Rating(models.Model):
+  barber= models.ForeignKey(Barber,on_delete=models.CASCADE, related_name="ratings")
+  customer = models.ForeignKey(Customer,on_delete=models.CASCADE, related_name="authors_ratings")
+  rating = models.PositiveSmallIntegerField ( validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, default=3)
+  created_at = models.DateTimeField(auto_now_add=True)
+  class Meta:
+    ordering = ['-created_at']
+    unique_together = ('barber', 'customer')
+  def __str__(self) -> str:
+     return f"{self.customer} Rates {self.barber}:({self.rating})"
+    
