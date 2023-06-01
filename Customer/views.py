@@ -34,8 +34,8 @@ class WalletView(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        (customer,created) = Customer.objects.get_or_create(user_id = self.request.user.id)
-        return Customer.objects.filter(id = customer)
+        # (customer,created) = Customer.objects.get_or_create(user_id = self.request.user.id)
+        return Customer.objects.filter(user_id = self.request.user.id)
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated],url_path="add_credits", url_name="add_credits")
     def add_credits(self, request):
