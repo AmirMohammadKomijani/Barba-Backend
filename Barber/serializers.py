@@ -27,12 +27,6 @@ class RatingSerializer(serializers.ModelSerializer):
 #######################################################
 ### Barber Panel Serializers
 
-
-
-
-
-
-
 ##############################################################
 ##### Bad Copy
 class InfoCategoryServiceSerializer(serializers.ModelSerializer):
