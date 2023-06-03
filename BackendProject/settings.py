@@ -115,6 +115,16 @@ REST_FRAMEWORK = {
     'PAGE_SIZE':9,
 }
 
+DJOSER = {
+    # 'LOGIN_FIELD': 'email',
+    "USER_CREATE_PASSWORD_RETYPE" : False,
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+ 
+    # 'SEND_ACTIVATION_EMAIL': True,
+
+}
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
@@ -170,3 +180,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'untitled.team.iust@gmail.com'
+EMAIL_HOST_PASSWORD = 'ywceixbxtqsgssgk'
+EMAIL_USE_TLS = True
