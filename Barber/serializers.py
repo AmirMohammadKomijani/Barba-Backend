@@ -198,7 +198,8 @@ class Put_BarberPanelSerializer(serializers.ModelSerializer):
         fields = ['status']
 
     def update(self, instance, validated_data):
-        instance.status = validated_data.get('status',instance.status)
+        if instance.status == "ordering" and instance.date >= datetime.date.today():
+            instance.status = validated_data.get('status',instance.status)
         instance.save()
         return instance
 

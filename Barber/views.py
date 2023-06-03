@@ -119,8 +119,8 @@ class BarberBuyPremiumView(ModelViewSet):
 
     def get_queryset(self):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
-        (premium,create) = BarberPremium.objects.get_or_create(barber = barber)
-        return BarberPremium.objects.filter(id = premium)
+        # (premium,create) = BarberPremium.objects.get_or_create(barber = barber)
+        return BarberPremium.objects.filter(barber = barber)
  
 
 #######################################################
