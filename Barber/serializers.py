@@ -352,7 +352,7 @@ class BarberBasketInfoSerializer(serializers.ModelSerializer):
         fields = ['BarberShop','phone_Number','area','address','logo']
 
 class Get_CustomerBasketSerializer(serializers.ModelSerializer):
-    service = CategoryServiceSerializer()
+    service = InfoCategoryServiceSerializer()
     barber = BarberBasketInfoSerializer()
     originalPrice = serializers.SerializerMethodField(method_name='original_price')
     totalCost = serializers.SerializerMethodField(method_name='total')
