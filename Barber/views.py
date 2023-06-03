@@ -1,93 +1,34 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from rest_framework.viewsets import ModelViewSet,ViewSet
+from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from rest_framework import generics , status
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Barber,Rate,OrderServices,Category,CategoryService,TotalPrice
-from .serializers import BarberSerializer,BarberProfileSerializer,TotalPriceSerializer,RateSerializer,BarberAreasSerializer,OrderServiceSerializer,CategorySerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer,Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer
-from .filters import BarberRateFilter,BarberPanelPriceFilter
+from .models import Barber,OrderServices,Category,CategoryService,BarberDescription, Comment , BarberPremium, Rating
+from .serializers import BarberInfoSerializer,BarberProfileSerializer ,BarberAreasSerializer,OrderServiceSerializer, \
+                        CategorySerializer,BarberDescriptionSerializer,CategoryServiceSerializer,Get_CustomerBasketSerializer, \
+                        Put_CustomerBasketSerializer,Put_BarberPanelSerializer,Get_BarberPanelSerializer,\
+                        CommentSerializerOnPOST, CommentSerializerOnPUT, CommentSerializerOnGET,GetBarberPremiumSerializer,PutBarberPremiumSerializer,\
+                        RatingSerializer
+from .filters import BarberRateFilter,BarberPanelFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from Auth.models import User
 from Customer.models import Customer
 import datetime
 
 
 
-# class OrderServiceView(ModelViewSet):
-#     queryset = OrderServices.objects.all()
-#     serializer_class = OrderServiceSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     # def get_queryset(self):
-#     #     return OrderServices.objects.filter(service_id = self.kwargs['pk'])
-
-#     def get_serializer_context(self):
-#         return {'user_id':self.request.user.id,'barber_id':self.kwargs['info_pk'],'service_id':self.kwargs['pk']}
 
 
-# class CustomerBuyWalletView(ModelViewSet):
-#     # queryset = Customer.objects.all()
-#     serializer_class = CustomerBuyWalletSerializer
-#     permission_classes = [IsAuthenticated]
+#######################################################
+### Barber Panel Serializers
 
-#     def get_queryset(self):
-#         return Customer.objects.filter(user_id = self.request.user.id)
-
-
-class TotalPriceView(ModelViewSet):
-    serializer_class = TotalPriceSerializer
-
-    def get_queryset(self):
-        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
-        return TotalPrice.objects.filter(customer_id = customer)
-
-class BarberPanelView(ModelViewSet):
-    #queryset = OrderServices.objects.all()
-    # serializer_class = Get_BarberPanelSerializer
-    permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['status','date']
-    # filterset_class = BarberPanelPriceFilter
-    ordering_fields = ['date','time']
-
-    def get_serializer_class(self):
-        if self.request.method == "PUT":
-            return Put_BarberPanelSerializer
-        return Get_BarberPanelSerializer
-    
-
-    def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
-        return OrderServices.objects.filter(barber_id = barber)#.filter(date = datetime.date.today())
-
-
-class CustomerBasketView(ModelViewSet):
-    #queryset = OrderServices.objects.all()
-    # serializer_class = Get_CustomerBasketSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_serializer_class(self):
-        if self.request.method == "PUT":
-            return Put_CustomerBasketSerializer
-        return Get_CustomerBasketSerializer
-    def get_queryset(self):
-        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
-        return OrderServices.objects.filter(customer_id = customer)
-
-# class CustomerBasketTotalPriceView(ModelViewSet):
-#     # queryset = OrderServices.objects.all()
-#     serializer_class = CustomerBasketTotalPriceSerializer
-
-#     def get_queryset(self):
-#         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
-#         return OrderServices.objects.filter(customer_id = customer) 
+## 1/ adding category and service
 
 class addCategoryView(ModelViewSet):
-    # queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     def get_serializer_context(self):
@@ -99,7 +40,6 @@ class addCategoryView(ModelViewSet):
 
 
 class addCategoryServiceView(ModelViewSet):
-    # queryset = CategoryService.objects.all()
     serializer_class = CategoryServiceSerializer
     permission_classes = [IsAuthenticated]
 
@@ -111,68 +51,16 @@ class addCategoryServiceView(ModelViewSet):
         return CategoryService.objects.filter(category_id = category)
 
 
-class OrderServiceView(ModelViewSet):
-    # queryset = OrderServices.objects.all()
-    serializer_class = OrderServiceSerializer
-    permission_classes = [IsAuthenticated]
-
-
-    # def create(self, request, *args, **kwargs):
-    #     serializer = OrderServiceSerializer(data=request.data,
-    #         context={'user_id':self.request.user.id})
-    #     serializer.is_valid(raise_exception=True)
-    #     order = serializer.save()
-    #     serializer = OrderServiceSerializer(order)
-    #     return Response(serializer.data)
-
-    def get_serializer_context(self):
-        return {'user_id':self.request.user.id}
-    
-    def get_queryset(self):
-        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
-        return OrderServices.objects.filter(customer_id = customer)
-
-
-
-# class addService(ModelViewSet):
-#     # queryset = Service.objects.all()
-#     # serializer_class = ServiceSerializer
-#     permission_classes = [IsAuthenticated]
-#     def get_serializer_class(self):
-#         if self.request.method == 'POST':
-#             return CreateServiceSerializer
-#         return ServiceSerializer
-
-#     def get_queryset(self):
-#         (barber,created) = Barber.objects.only('id').get_or_create(user_id = self.request.user.id)
-#         return Service.objects.filter(barber_id = barber).all()
-    
-#     def get_serializer_context(self):
-#         return {'user_id':self.request.user.id}
-
-
-
-
-class BarberView(ModelViewSet):
-    queryset = Barber.objects.all()
-    serializer_class = BarberSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = BarberRateFilter
-    search_fields = ['BarberShop']
-    ordering_fields = ['rate']
-    # permission_classes = [IsAuthenticated]
-
+## 2/ profile and description of barbershop
 
 class BarberProfileView(ModelViewSet):
     queryset = Barber.objects.all()
     serializer_class = BarberProfileSerializer
-    # permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
         (barber, created) = Barber.objects.get_or_create(
             user_id=request.user.id)
-        # baseInfo = User.objects.prefetch_related('barber_set').all()
         if request.method == 'GET':
             serializer = BarberProfileSerializer(barber)
             return Response(serializer.data)
@@ -181,7 +69,144 @@ class BarberProfileView(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+        
 
+class BarberDescriptionView(ModelViewSet):
+    serializer_class = BarberDescriptionSerializer
+
+    def get_queryset(self):
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        return BarberDescription.objects.filter(barber_id = barber)
+    def get_serializer_context(self):
+        return {'barber_id':self.request.user.id}
+
+
+## 3/ Barber management segment
+
+class BarberPanelView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = BarberPanelFilter
+    ordering_fields = ['date','time']
+
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return Put_BarberPanelSerializer
+        return Get_BarberPanelSerializer
+    
+    def get_queryset(self):
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        return OrderServices.objects.filter(barber_id = barber)
+
+class BarberPremiumView(APIView):
+    def get(self,request):
+        (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+        queryset = BarberPremium.objects.filter(barber = barber)
+        serializer = GetBarberPremiumSerializer(queryset,many=True)
+        return Response(serializer.data)
+    
+
+    # def put(self,request,id):
+    #     (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+    #     queryset = BarberPremium.objects.filter(barber = barber)
+    #     serializer = PutBarberPremiumSerializer(queryset,data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     return Response(serializer.data)
+
+
+class BarberBuyPremiumView(ModelViewSet):
+    serializer_class = PutBarberPremiumSerializer
+
+    def get_queryset(self):
+        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        # (premium,create) = BarberPremium.objects.get_or_create(barber = barber)
+        return BarberPremium.objects.filter(barber = barber)
+ 
+
+#######################################################
+### customer ordering and paying process
+## 1/ Barber info
+
+class BarberInfoView(ModelViewSet):
+    queryset = Barber.objects.all()
+    serializer_class = BarberInfoSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = BarberRateFilter
+    search_fields = ['BarberShop']
+    ordering_fields = ['rate']
+    
+    @action(methods=["POST"], permission_classes=[IsAuthenticated], detail=True)
+    def rate(self, request,pk=None, *args, **kwargs):
+        # Get all ratings for the specified barber and customer
+        customer = request.user.customer
+        barber = get_object_or_404(Barber, pk=pk)
+        ratings = Rating.objects.filter(barber=barber, customer=customer)
+        if ratings.exists():
+            # If there are multiple ratings, delete all but the most recent one
+            if ratings.count() > 1:
+                old_ratings = ratings.order_by('-created_at')[:len(ratings)-1]
+                # old_ratings.delete()
+                for old_rating in old_ratings:
+                    old_rating.delete()
+            # Update the most recent rating with the new rating value
+            rating =ratings.order_by('-created_at').first()
+            serializer =RatingSerializer(rating, data=request.data)
+        else :
+                # If there are no ratings, create a new rating            
+                serializer = RatingSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(customer=customer, barber=barber)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Save the updated rating
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+        
+
+
+## 2/ Ordering a service
+
+class OrderServiceView(ModelViewSet):
+    serializer_class = OrderServiceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        return {'user_id':self.request.user.id}
+    
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        return OrderServices.objects.filter(customer_id = customer)
+
+## 3/ Customer Basket
+
+class CustomerBasketView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return Put_CustomerBasketSerializer
+        return Get_CustomerBasketSerializer
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        # history = OrderServices.objects.filter(customer_id = customer)
+        return OrderServices.objects.filter(customer = customer,date__gt =  datetime.date.today(),status = "ordering")
+
+
+class CustomerOrderHistoryView(ModelViewSet):
+    serializer_class = Get_CustomerBasketSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['date','status']
+    # filterset_class = CustomerOrderHistoryFilter
+    ordering_fields = ['date','time']
+    
+    def get_queryset(self):
+        (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
+        return OrderServices.objects.filter(customer_id = customer)
+
+
+###############################################################
+### extra information    
 
 class Areas(ModelViewSet):
     serializer_class = BarberAreasSerializer
@@ -189,12 +214,50 @@ class Areas(ModelViewSet):
 
     def get_queryset(self):
         return Barber.objects.values('area').distinct()
+
+
+
+# class CommentCreateView(CreateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+#     permission_classes = [IsAuthenticated,]
+
+#     def perform_create(self, serializer):
+#         serializer.save(customer=self.request.user.customer)
+# class CommentReplyView(UpdateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
+#     permission_classes = [IsAuthenticated,]
+
+#     def perform_update(self, serializer):
+#         if self.request.useer.barber:
+#             serializer.save(barber=self.request.user.barber)
+#         return Response("google.com",status=404 )
         
-
-        
-class RateView(ModelViewSet):
-    queryset = Rate.objects.all()
-    serializer_class = RateSerializer
-
-
-
+class CommentCreateAPIView(CreateAPIView):#, generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializerOnPOST
+    queryset = Comment.objects.all()    
+    
+    def get_serializer_context(self):
+        return {"customer_id":self.request.user.id}
+    # def update(self, request, *args, **kwargs):
+    #     # serializer_class = 
+    #     return super().update(request, *args, **kwargs)
+class CommentReplyAPIView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializerOnPUT
+    queryset = Comment.objects.all()    
+    # def perform_create(self, serializer):
+    #     # if self.request.user.barber == comment.barber:
+    #     # if self.request.user.barber == self.context['request'].user.barber:
+    #         comment_id = self.kwargs.get('comment_id')
+    #         comment = get_object_or_404(Comment, id=comment_id)
+    #         serializer.save(barber=self.request.user.barber, comment=comment)
+        # serializer.save(comment=comment)
+class  CommentShowAPIView(generics.ListAPIView):
+    # queryset = Comment.objects.all()
+    serializer_class = CommentSerializerOnGET
+    def get_queryset(self):
+        (barber_id,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        return Comment.objects.filter(barber_id=barber_id)

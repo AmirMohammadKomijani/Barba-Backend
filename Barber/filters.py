@@ -1,5 +1,7 @@
-from django_filters.rest_framework import FilterSet,RangeFilter,NumberFilter
-from .models import Barber,CategoryService,OrderServices
+from django_filters.rest_framework import FilterSet,DateFromToRangeFilter
+from .models import Barber,OrderServices
+
+
 
 
 class BarberRateFilter(FilterSet):
@@ -10,18 +12,11 @@ class BarberRateFilter(FilterSet):
             'rate':['gte','lte']
         }
 
-class BarberPanelPriceFilter(FilterSet):
-    #price = RangeFilter()
-    # price = NumberFilter(method='priceRange')
-
-    # def priceRange(self):
-    #     service_id = OrderServices.objects.get(id = self.request.user.id)
-    #     return CategoryService.objects.only('price').filter(id = service_id)
 
 
+class BarberPanelFilter(FilterSet):
+    date = DateFromToRangeFilter()
+    
     class Meta:
         model = OrderServices
-        fields = {
-            'status':['exact'],
-            'date':['exact'],
-        }
+        fields = ['status','date']
