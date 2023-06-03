@@ -119,7 +119,8 @@ class BarberBuyPremiumView(ModelViewSet):
 
     def get_queryset(self):
         (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
-        return BarberPremium.objects.filter(barber=barber)
+        (premium,create) = BarberPremium.objects.get_or_create(barber = barber)
+        return BarberPremium.objects.filter(id = premium)
  
 
 #######################################################
@@ -187,8 +188,8 @@ class CustomerBasketView(ModelViewSet):
         return Get_CustomerBasketSerializer
     def get_queryset(self):
         (customer,created) = Customer.objects.get_or_create(user_id=self.request.user.id)
-        history = OrderServices.objects.filter(customer_id = customer)
-        return OrderServices.objects.filter(date__gt =  datetime.date.today())
+        # history = OrderServices.objects.filter(customer_id = customer)
+        return OrderServices.objects.filter(customer = customer,date__gt =  datetime.date.today(),status = "ordering")
 
 
 class CustomerOrderHistoryView(ModelViewSet):
