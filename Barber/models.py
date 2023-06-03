@@ -80,9 +80,10 @@ class Category(models.Model):
 
 
 class CategoryService(models.Model):
+
   service = models.CharField(max_length=255,null=False)
   price = models.FloatField(null=False)
-  servicePic = models.ImageField(upload_to='Barber/Service',null=True,default='default_profile.png')
+  servicePic = models.ImageField(upload_to='Barber/Service',null=False,default='default_profile.png')
   category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='categoryServices')
 
 

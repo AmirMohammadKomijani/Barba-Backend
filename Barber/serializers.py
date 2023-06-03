@@ -27,6 +27,55 @@ class RatingSerializer(serializers.ModelSerializer):
 #######################################################
 ### Barber Panel Serializers
 
+
+
+
+
+
+
+##############################################################
+##### Bad Copy
+class InfoCategoryServiceSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = CategoryService
+        fields = ['id','service','price','servicePic']
+
+    def create(self, validated_data):
+        category = Category.objects.get(id = self.context['category_id'])
+        validated_data['category'] = category
+        return CategoryService.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.service = validated_data.get('service',instance.service)
+        instance.price = validated_data.get('price',instance.price)
+        instance.servicePic = validated_data.get('servicePic',instance.servicePic)
+        instance.save()
+        return instance
+         
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['servicePic'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['servicePic']
+    #     return representation
+    
+class InfoCategorySerializer(serializers.ModelSerializer):
+    categoryServices = InfoCategoryServiceSerializer(many=True,read_only=True)
+    class Meta():
+        model = Category
+        fields = ['id','category','categoryServices']
+    
+    def create(self, validated_data):
+        barber = Barber.objects.get(user_id = self.context['barber_id'])
+        validated_data['barber'] = barber
+        return Category.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.category = validated_data.get('category',instance.category)
+        instance.save()
+        return instance
+
+
+############################################################
+
 ## 1/ adding category and service
 
 class CategoryServiceSerializer(serializers.ModelSerializer):
@@ -45,8 +94,12 @@ class CategoryServiceSerializer(serializers.ModelSerializer):
         instance.servicePic = validated_data.get('servicePic',instance.servicePic)
         instance.save()
         return instance
-
-
+         
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['servicePic'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['servicePic']
+        return representation
+    
 class CategorySerializer(serializers.ModelSerializer):
     categoryServices = CategoryServiceSerializer(many=True,read_only=True)
     class Meta():
@@ -248,7 +301,7 @@ class BarberInfoDescriptionSerializer(serializers.ModelSerializer):
         fields = ['id','title','description','img']
     
 class BarberInfoSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True)
+    categories = InfoCategorySerializer(many=True)
     rating = serializers.SerializerMethodField(source= "get_rating")
     customers_rate = serializers.SerializerMethodField()
     barberDesc = BarberInfoDescriptionSerializer(many=True)

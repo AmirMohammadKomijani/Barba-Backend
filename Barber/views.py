@@ -133,6 +133,7 @@ class BarberInfoView(ModelViewSet):
     filterset_class = BarberRateFilter
     search_fields = ['BarberShop']
     ordering_fields = ['rate']
+    
     @action(methods=["POST"], permission_classes=[IsAuthenticated], detail=True)
     def rate(self, request,pk=None, *args, **kwargs):
         # Get all ratings for the specified barber and customer
