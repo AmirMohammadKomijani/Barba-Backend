@@ -75,7 +75,7 @@ class BarberDescriptionView(ModelViewSet):
     serializer_class = BarberDescriptionSerializer
 
     def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        barber = Barber.objects.get(user_id = self.request.user.id)
         return BarberDescription.objects.filter(barber_id = barber)
     def get_serializer_context(self):
         return {'barber_id':self.request.user.id}
@@ -100,7 +100,7 @@ class BarberPanelView(ModelViewSet):
 
 class BarberPremiumView(APIView):
     def get(self,request):
-        (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+        barber = Barber.objects.get(user_id=request.user.id)
         queryset = BarberPremium.objects.filter(barber = barber)
         serializer = GetBarberPremiumSerializer(queryset,many=True)
         return Response(serializer.data)

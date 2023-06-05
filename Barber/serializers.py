@@ -118,7 +118,7 @@ class BarberDescriptionSerializer(serializers.ModelSerializer):
         fields = ['id','title','description','img']
 
     def create(self, validated_data):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.context['barber_id'])
+        barber = Barber.objects.get(user_id = self.context['barber_id'])
         validated_data['barber'] = barber
         return BarberDescription.objects.create(**validated_data)
 
