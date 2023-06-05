@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Barber,OrderServices,CategoryService,Category,BarberDescription, Comment,BarberPremium, Rating
-from Auth.serializer import UserSerializer
+from Auth.serializers import UserSerializer
 from Customer.serializers import  CustomerWalletSerializer
 from Customer.models import Customer
 from dateutil.relativedelta import relativedelta
