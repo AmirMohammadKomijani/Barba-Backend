@@ -210,7 +210,7 @@ class GetBarberPremiumSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='calc_days')
     class Meta:
         model = BarberPremium
-        fields = ['id','expire_date','month','days']
+        fields = ['id','expire_date','days']
     
     def calc_days(self,obj):
         days = (obj.expire_date - datetime.date.today()).days
@@ -235,7 +235,7 @@ class PutBarberPremiumSerializer(serializers.ModelSerializer):
         # instance.expire_date = validated_data.get('expire_date',instance.expire_date)
         if instance.expire_date <= datetime.date.today():
             instance.month = validated_data.get('month',instance.month)
-            instance.expire_date += relativedelta(months=instance.month)
+            instance.expire_date = datetime.date.today() + relativedelta(months=instance.month)
             instance.save()
             return instance
         # elif instance.expire_date - datetime.date.today() < 0:
