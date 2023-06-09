@@ -11,7 +11,7 @@ def create_barber_for_new_user(sender, **kwargs):
 
 
 @receiver(post_save, sender=Barber)
-def create_barber_for_new_user(sender, **kwargs):
+def create_barbershop_for_new_user(sender, **kwargs):
   if kwargs['created']:
     BarberDescription.objects.create(barber=kwargs['instance'])
     BarberPremium.objects.create(barber=kwargs['instance'])
