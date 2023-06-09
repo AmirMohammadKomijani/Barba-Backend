@@ -97,11 +97,7 @@ class BarberPanelView(ModelViewSet):
     
     def get_queryset(self):
         barber = Barber.objects.get(user_id = self.request.user.id)
-        premium = BarberPremium.objects.filter(barber_id=barber,expire_date__gt=datetime.date.today())
-        if premium.exists(): 
-            return OrderServices.objects.filter(barber_id = barber)
-        else:
-            raise Http404("your free account is finished you should upgrade it.")
+        return OrderServices.objects.filter(barber_id = barber)
         
 class BarberPremiumView(APIView):
     def get(self,request):

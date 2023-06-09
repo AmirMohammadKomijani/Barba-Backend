@@ -62,7 +62,7 @@ class BarberPremium(models.Model):
   
   
   barber = models.ForeignKey(Barber,on_delete=models.CASCADE,default=1)
-  expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=-1))
+  expire_date = models.DateField(default=datetime.date.today() + relativedelta(months=1))
   month = models.IntegerField(choices=during_choices,default=0)
 
 
