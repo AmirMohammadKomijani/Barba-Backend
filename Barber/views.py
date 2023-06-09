@@ -97,7 +97,10 @@ class BarberPanelView(ModelViewSet):
     
     def get_queryset(self):
         barber = Barber.objects.get(user_id = self.request.user.id)
-        return OrderServices.objects.filter(barber_id = barber)
+        premium = BarberPremium.objects.select_related('barber').filter(expire_date__gt=datetime.date.today()).exists()
+        if premium:
+            return OrderServices.objects.filter(barber = barber)
+            
         
 class BarberPremiumView(APIView):
     def get(self,request):
