@@ -82,6 +82,7 @@ class BarberDescriptionView(ModelViewSet):
 
 
 ## 3/ Barber management segment
+from django.http import Http404
 
 class BarberPanelView(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -95,9 +96,13 @@ class BarberPanelView(ModelViewSet):
         return Get_BarberPanelSerializer
     
     def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
-        return OrderServices.objects.filter(barber_id = barber)
-
+        barber = Barber.objects.get(user_id = self.request.user.id)
+        premium = BarberPremium.objects.filter(barber_id=barber,expire_date__gt=datetime.date.today())
+        if premium.exists(): 
+            return OrderServices.objects.filter(barber_id = barber)
+        else:
+            raise Http404("your free account is finished you should upgrade it.")
+        
 class BarberPremiumView(APIView):
     def get(self,request):
         barber = Barber.objects.get(user_id=request.user.id)
