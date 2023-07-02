@@ -75,13 +75,14 @@ class BarberDescriptionView(ModelViewSet):
     serializer_class = BarberDescriptionSerializer
 
     def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
+        barber = Barber.objects.get(user_id = self.request.user.id)
         return BarberDescription.objects.filter(barber_id = barber)
     def get_serializer_context(self):
         return {'barber_id':self.request.user.id}
 
 
 ## 3/ Barber management segment
+from django.http import Http404
 
 class BarberPanelView(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -95,12 +96,15 @@ class BarberPanelView(ModelViewSet):
         return Get_BarberPanelSerializer
     
     def get_queryset(self):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.request.user.id)
-        return OrderServices.objects.filter(barber_id = barber)
-
+        barber = Barber.objects.get(user_id = self.request.user.id)
+        premium = BarberPremium.objects.select_related('barber').filter(expire_date__gt=datetime.date.today()).exists()
+        if premium:
+            return OrderServices.objects.filter(barber = barber)
+            
+        
 class BarberPremiumView(APIView):
     def get(self,request):
-        (barber,created) = Barber.objects.get_or_create(user_id=request.user.id)
+        barber = Barber.objects.get(user_id=request.user.id)
         queryset = BarberPremium.objects.filter(barber = barber)
         serializer = GetBarberPremiumSerializer(queryset,many=True)
         return Response(serializer.data)

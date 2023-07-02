@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Customer
-from Auth.serializer import UserSerializer
+from Auth.serializers import UserSerializer
 
 
 

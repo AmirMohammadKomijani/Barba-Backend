@@ -1,8 +1,19 @@
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer , UserSerializer as BaseUserSerializer
 from .models import User
 from rest_framework import serializers
+from Barber.models import Barber
+from Customer.models import Customer
 
 class UserCreateSerializer(BaseUserCreateSerializer):
+    
+    # def save(self, **kwargs):
+    #     user = super().save(**kwargs)
+    #     if user.role == "barber":
+    #         Barber.objects.create(user_id=user.id)
+    #     elif user.role == "customer":
+    #         Customer.objects.create(user=user)
+        
+    
     class Meta(BaseUserCreateSerializer.Meta):
         fields = ['id','username','email','role','password']
 
@@ -10,12 +21,6 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         fields = ['email','username','password']
-
-
-
-
-
-
 
 
 

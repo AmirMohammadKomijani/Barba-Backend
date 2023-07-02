@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Barber,OrderServices,CategoryService,Category,BarberDescription, Comment,BarberPremium, Rating
-from Auth.serializer import UserSerializer
+from Auth.serializers import UserSerializer
 from Customer.serializers import  CustomerWalletSerializer
 from Customer.models import Customer
 from dateutil.relativedelta import relativedelta
@@ -118,7 +118,7 @@ class BarberDescriptionSerializer(serializers.ModelSerializer):
         fields = ['id','title','description','img']
 
     def create(self, validated_data):
-        (barber,created) = Barber.objects.get_or_create(user_id = self.context['barber_id'])
+        barber = Barber.objects.get(user_id = self.context['barber_id'])
         validated_data['barber'] = barber
         return BarberDescription.objects.create(**validated_data)
 
@@ -210,7 +210,7 @@ class GetBarberPremiumSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='calc_days')
     class Meta:
         model = BarberPremium
-        fields = ['id','expire_date','month','days']
+        fields = ['id','expire_date','days']
     
     def calc_days(self,obj):
         days = (obj.expire_date - datetime.date.today()).days
@@ -235,7 +235,7 @@ class PutBarberPremiumSerializer(serializers.ModelSerializer):
         # instance.expire_date = validated_data.get('expire_date',instance.expire_date)
         if instance.expire_date <= datetime.date.today():
             instance.month = validated_data.get('month',instance.month)
-            instance.expire_date += relativedelta(months=instance.month)
+            instance.expire_date = datetime.date.today() + relativedelta(months=instance.month)
             instance.save()
             return instance
         # elif instance.expire_date - datetime.date.today() < 0:
